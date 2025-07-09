@@ -1,0 +1,10 @@
+Flask
+flask-cors
+flask-jwt-extended
+flask-limiter
+python-dotenv
+openai
+pytesseract
+python-docx
+PyMuPDF
+Pillow

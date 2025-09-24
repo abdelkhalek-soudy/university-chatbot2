@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  badya-chatbot:
+    build: .
+    container_name: badya-university-chatbot
+    ports:
+      - "5000:5000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SECRET_KEY=${SECRET_KEY}
+      - FLASK_ENV=production
+      - HOST=0.0.0.0
+      - PORT=5000
+    volumes:
+      - ./uploads:/app/uploads
+      - ./chatbot.db:/app/chatbot.db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    name: badya-chatbot-network

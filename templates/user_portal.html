@@ -1,0 +1,1690 @@
+<!--
+  جامعة باديا - بوابة الطلاب
+  تم تطويره بواسطة: عبدالخالق محمد
+  حقوق النشر © 2024 - جميع الحقوق محفوظة
+
+  هذا الكود ملك حصري لجامعة باديا ويحظر نسخه أو توزيعه بدون إذن كتابي مسبق
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الطلاب - جامعة باديا</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* الأمواج المتحركة في الخلفية */
+        .animated-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.25;
+        }
+
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 150px;
+            background: linear-gradient(90deg, transparent, rgba(248, 249, 250, 0.5), transparent);
+            border-radius: 50%;
+            animation: wave-animation 15s infinite linear;
+            transform-origin: center;
+        }
+
+        .wave::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(248, 249, 250, 0.4), transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: ripple 3s infinite ease-out;
+        }
+
+        .wave::after {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(248, 249, 250, 0.3), transparent);
+            border-radius: 50%;
+            animation: ripple 4s infinite ease-out 0.5s;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0.1;
+            }
+        }
+
+        .wave:nth-child(1) {
+            top: 10%;
+            animation-delay: 0s;
+            animation-duration: 20s;
+        }
+
+        .wave:nth-child(2) {
+            top: 30%;
+            animation-delay: -5s;
+            animation-duration: 25s;
+        }
+
+        .wave:nth-child(3) {
+            top: 50%;
+            animation-delay: -10s;
+            animation-duration: 18s;
+        }
+
+        .wave:nth-child(4) {
+            top: 70%;
+            animation-delay: -15s;
+            animation-duration: 22s;
+        }
+
+        .wave:nth-child(5) {
+            top: 5%;
+            right: 0;
+            animation-delay: -8s;
+            animation-duration: 16s;
+            background: linear-gradient(90deg, transparent, rgba(248, 249, 250, 0.3), transparent);
+        }
+
+        .wave:nth-child(6) {
+            top: 25%;
+            right: 0;
+            animation-delay: -12s;
+            animation-duration: 24s;
+            background: linear-gradient(90deg, transparent, rgba(248, 249, 250, 0.45), transparent);
+        }
+
+        .wave:nth-child(7) {
+            top: 45%;
+            right: 0;
+            animation-delay: -6s;
+            animation-duration: 20s;
+            background: linear-gradient(90deg, transparent, rgba(248, 249, 250, 0.35), transparent);
+        }
+
+        .wave:nth-child(9) {
+            top: 85%;
+            left: 0;
+            animation-delay: -20s;
+            animation-duration: 16s;
+            background: linear-gradient(90deg, transparent, rgba(248, 249, 250, 0.35), transparent);
+        }
+
+        .wave:nth-child(10) {
+            top: 15%;
+            left: 0;
+            animation-delay: -25s;
+            animation-duration: 20s;
+            background: linear-gradient(90deg, transparent, rgba(248, 249, 250, 0.4), transparent);
+        }
+
+        .wave:nth-child(1)::before {
+            animation-delay: 0s;
+        }
+
+        .wave:nth-child(2)::before {
+            animation-delay: 1s;
+        }
+
+        .wave:nth-child(3)::before {
+            animation-delay: 2s;
+        }
+
+        .wave:nth-child(4)::before {
+            animation-delay: 3s;
+        }
+
+        .wave:nth-child(5)::before {
+            animation-delay: 0.5s;
+        }
+
+        .wave:nth-child(6)::before {
+            animation-delay: 1.5s;
+        }
+
+        .wave:nth-child(7)::before {
+            animation-delay: 2.5s;
+        }
+
+        .wave:nth-child(8)::before {
+            animation-delay: 3.5s;
+        }
+
+        @keyframes wave-animation {
+            0% {
+                transform: translateX(-100%) rotate(0deg);
+            }
+            100% {
+                transform: translateX(100%) rotate(360deg);
+            }
+        }
+
+        /* أمواج إضافية صغيرة */
+        .small-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.18;
+        }
+
+        .small-wave {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(248, 249, 250, 0.7), transparent);
+            border-radius: 50%;
+            animation: small-wave-animation 8s infinite ease-in-out;
+        }
+
+        .small-wave:nth-child(1) {
+            top: 15%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .small-wave:nth-child(2) {
+            top: 35%;
+            left: 80%;
+            animation-delay: -2s;
+        }
+
+        .small-wave:nth-child(3) {
+            top: 55%;
+            left: 20%;
+            animation-delay: -4s;
+        }
+
+        .small-wave:nth-child(4) {
+            top: 75%;
+            left: 70%;
+            animation-delay: -6s;
+        }
+
+        /* أمواج دائرية متحركة */
+        .circular-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .circular-wave {
+            position: absolute;
+            border: 2px solid rgba(248, 249, 250, 0.4);
+            border-radius: 50%;
+            animation: circular-wave-animation 12s infinite linear;
+        }
+
+        .circular-wave:nth-child(1) {
+            top: 20%;
+            left: 15%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+            animation-duration: 12s;
+        }
+
+        .circular-wave:nth-child(2) {
+            top: 60%;
+            left: 70%;
+            width: 120px;
+            height: 120px;
+            animation-delay: -3s;
+            animation-duration: 15s;
+        }
+
+        .circular-wave:nth-child(3) {
+            top: 40%;
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: -6s;
+            animation-duration: 10s;
+        }
+
+        .circular-wave:nth-child(4) {
+            top: 80%;
+            left: 20%;
+            width: 100px;
+            height: 100px;
+            animation-delay: -9s;
+            animation-duration: 14s;
+        }
+
+        .circular-wave:nth-child(5) {
+            top: 10%;
+            left: 60%;
+            width: 70px;
+            height: 70px;
+            animation-delay: -4s;
+            animation-duration: 11s;
+            height: 70px;
+            animation-delay: -4s;
+            animation-duration: 11s;
+        }
+
+        @keyframes circular-wave-animation {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.9;
+            }
+            50% {
+                transform: scale(1.5) rotate(180deg);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* شريط الموجات الصوتية */
+        .audio-visualizer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .audio-visualizer.show {
+            display: flex;
+        }
+
+        .audio-visualizer-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+            animation: visualizer-appear 0.3s ease-out;
+        }
+
+        @keyframes visualizer-appear {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .audio-visualizer-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .audio-visualizer-content::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .audio-visualizer-title {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .audio-visualizer-subtitle {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .audio-bars {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            gap: 4px;
+            margin-bottom: 30px;
+        }
+
+        .audio-bar {
+            width: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+            animation: audio-bar-animation 1.5s ease-in-out infinite;
+            transform-origin: bottom;
+        }
+
+        .audio-bar:nth-child(1) { animation-delay: 0s; height: 10px; }
+        .audio-bar:nth-child(2) { animation-delay: 0.1s; height: 25px; }
+        .audio-bar:nth-child(3) { animation-delay: 0.2s; height: 15px; }
+        .audio-bar:nth-child(4) { animation-delay: 0.3s; height: 35px; }
+        .audio-bar:nth-child(5) { animation-delay: 0.4s; height: 20px; }
+        .audio-bar:nth-child(6) { animation-delay: 0.5s; height: 40px; }
+        .audio-bar:nth-child(7) { animation-delay: 0.6s; height: 18px; }
+        .audio-bar:nth-child(8) { animation-delay: 0.7s; height: 30px; }
+        .audio-bar:nth-child(9) { animation-delay: 0.8s; height: 22px; }
+        .audio-bar:nth-child(10) { animation-delay: 0.9s; height: 28px; }
+
+        /* ألوان متنوعة للأمواج الصوتية */
+        .audio-bar:nth-child(1) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .audio-bar:nth-child(2) { background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); }
+        .audio-bar:nth-child(3) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .audio-bar:nth-child(4) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .audio-bar:nth-child(5) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .audio-bar:nth-child(6) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .audio-bar:nth-child(7) { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .audio-bar:nth-child(8) { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .audio-bar:nth-child(9) { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
+        .audio-bar:nth-child(10) { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+
+        @keyframes audio-bar-animation {
+            0%, 100% {
+                transform: scaleY(0.3);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        .audio-bars.processing .audio-bar {
+            animation-duration: 2s;
+        }
+
+        .audio-bars.processing .audio-bar:nth-child(odd) {
+            animation-delay: 0s;
+        }
+
+        .audio-bars.processing .audio-bar:nth-child(even) {
+            animation-delay: 0.5s;
+        }
+
+        .audio-visualizer-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #667eea;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .audio-visualizer-status .pulse {
+            width: 8px;
+            height: 8px;
+            background: #dc3545;
+            border-radius: 50%;
+            animation: pulse-animation 1s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+
+        .audio-visualizer-close {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .audio-visualizer-close:hover {
+            background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .audio-visualizer-close:active {
+            transform: translateY(0);
+        }
+
+        .audio-visualizer.fade-out {
+            animation: visualizer-disappear 0.3s ease-in forwards;
+        }
+
+        @keyframes visualizer-disappear {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        /* أمواج خطية أفقية */
+        .horizontal-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.2;
+        }
+
+        .horizontal-wave {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(248, 249, 250, 0.7), transparent);
+            animation: horizontal-wave-animation 8s infinite ease-in-out;
+        }
+
+        .horizontal-wave:nth-child(1) {
+            top: 25%;
+            animation-delay: 0s;
+        }
+
+        .horizontal-wave:nth-child(2) {
+            top: 45%;
+            animation-delay: -2s;
+        }
+
+        .horizontal-wave:nth-child(3) {
+            top: 65%;
+            animation-delay: -4s;
+        }
+
+        .horizontal-wave:nth-child(4) {
+            top: 15%;
+            animation-delay: -6s;
+        }
+
+        .horizontal-wave:nth-child(5) {
+            top: 85%;
+            animation-delay: -8s;
+        }
+
+        /* أمواج متدرجة بيضاوية */
+        .oval-waves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.12;
+        }
+
+        .oval-wave {
+            position: absolute;
+            border: 1px solid rgba(248, 249, 250, 0.25);
+            border-radius: 50%;
+            animation: oval-wave-animation 10s infinite ease-in-out;
+            transform: rotate(45deg);
+        }
+
+        .oval-wave:nth-child(1) {
+            top: 30%;
+            left: 25%;
+            width: 120px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+
+        .oval-wave:nth-child(2) {
+            top: 70%;
+            left: 60%;
+            width: 100px;
+            height: 70px;
+            animation-delay: -3s;
+        }
+
+        .oval-wave:nth-child(3) {
+            top: 50%;
+            left: 10%;
+            width: 90px;
+            height: 60px;
+            animation-delay: -6s;
+        }
+
+        .oval-wave:nth-child(4) {
+            top: 20%;
+            left: 70%;
+            width: 80px;
+            height: 110px;
+            animation-delay: -8s;
+        }
+
+        .oval-wave:nth-child(5) {
+            top: 80%;
+            left: 5%;
+            width: 70px;
+            height: 95px;
+            animation-delay: -10s;
+        }
+
+        /* أمواج متموجة أفقية */
+        .wavy-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.08;
+        }
+
+        .wavy-line {
+            position: absolute;
+            width: 120%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(248, 249, 250, 0.5), transparent);
+            animation: wavy-line-animation 6s infinite ease-in-out;
+            border-radius: 50%;
+        }
+
+        .wavy-line:nth-child(1) {
+            top: 35%;
+            animation-delay: 0s;
+            transform: rotate(2deg);
+        }
+
+        .wavy-line:nth-child(2) {
+            top: 55%;
+            animation-delay: -2s;
+            transform: rotate(-1deg);
+        }
+
+        .wavy-line:nth-child(4) {
+            top: 85%;
+            animation-delay: -6s;
+            transform: rotate(-2deg);
+        }
+
+        @keyframes wavy-line-animation {
+            0%, 100% {
+                transform: translateX(-20%) rotate(2deg) scaleY(1);
+                opacity: 0.3;
+            }
+            33% {
+                transform: translateX(0%) rotate(2deg) scaleY(1.2);
+                opacity: 0.8;
+            }
+            66% {
+                transform: translateX(20%) rotate(2deg) scaleY(0.8);
+                opacity: 0.5;
+            }
+        }
+        
+        /* لوجو الجامعة */
+        .university-logo {
+            position: fixed;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: -1;
+            opacity: 0.4;
+            width: 200px;
+            height: 240px;
+            animation: logo-pulse 8s ease-in-out infinite;
+        }
+        
+        .university-logo svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(2px 2px 8px rgba(200, 123, 58, 0.3));
+        }
+        
+        @keyframes logo-pulse {
+            0%, 100% {
+                opacity: 0.35;
+                transform: translateY(-50%) scale(1) rotate(0deg);
+            }
+            25% {
+                opacity: 0.45;
+                transform: translateY(-50%) scale(1.03) rotate(0.5deg);
+            }
+            50% {
+                opacity: 0.55;
+                transform: translateY(-50%) scale(1.06) rotate(0deg);
+            }
+            75% {
+                opacity: 0.45;
+                transform: translateY(-50%) scale(1.03) rotate(-0.5deg);
+            }
+        }
+        
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .portal-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 800px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .portal-header {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            margin: -40px -40px 40px -40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header-lang-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .header-lang-toggle:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: scale(1.05);
+        }
+        
+        .university-logo-header {
+            background: white;
+            width: 120px;
+            height: 120px;
+            border-radius: 15px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .university-logo-header svg {
+            width: 80px;
+            height: 96px;
+        }
+        
+        .portal-header h1 {
+            color: white;
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .portal-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+        
+        .login-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chat-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            min-height: 400px;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            padding: 12px 15px;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-outline-secondary {
+            border-color: #cbd5e0;
+            color: #4a5568;
+            border-radius: 10px;
+            padding: 8px 20px;
+        }
+        
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            background: white;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .message.bot {
+            background: #e2e8f0;
+            color: #4a5568;
+            margin-right: auto;
+        }
+        
+        .user-info {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            border-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+            border-color: #545b62;
+        }
+        
+        .btn-secondary.recording {
+            background: #dc3545;
+            border-color: #dc3545;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .rtl {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .ltr {
+            direction: ltr;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <!-- الأمواج المتحركة في الخلفية -->
+    <div class="animated-waves">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <!-- أمواج إضافية صغيرة -->
+    <div class="small-waves">
+        <div class="small-wave"></div>
+        <div class="small-wave"></div>
+        <div class="small-wave"></div>
+        <div class="small-wave"></div>
+        <div class="small-wave"></div>
+        <div class="small-wave"></div>
+    </div>
+
+    <!-- أمواج دائرية متحركة -->
+    <div class="circular-waves">
+        <div class="circular-wave"></div>
+        <div class="circular-wave"></div>
+        <div class="circular-wave"></div>
+        <div class="circular-wave"></div>
+        <div class="circular-wave"></div>
+        <div class="circular-wave"></div>
+        <div class="circular-wave"></div>
+    </div>
+
+    <!-- أمواج خطية أفقية -->
+    <div class="horizontal-waves">
+        <div class="horizontal-wave"></div>
+        <div class="horizontal-wave"></div>
+        <div class="horizontal-wave"></div>
+        <div class="horizontal-wave"></div>
+        <div class="horizontal-wave"></div>
+    </div>
+
+    <!-- أمواج متدرجة بيضاوية -->
+    <div class="oval-waves">
+        <div class="oval-wave"></div>
+        <div class="oval-wave"></div>
+        <div class="oval-wave"></div>
+        <div class="oval-wave"></div>
+        <div class="oval-wave"></div>
+    </div>
+
+    <!-- أمواج متموجة أفقية -->
+    <div class="wavy-lines">
+        <div class="wavy-line"></div>
+        <div class="wavy-line"></div>
+        <div class="wavy-line"></div>
+        <div class="wavy-line"></div>
+    </div>
+    
+    <!-- لوجو الجامعة -->
+    <div class="university-logo">
+        <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+            <!-- النجمة العلوية -->
+            <path d="M100 20 L108 35 L125 35 L112 46 L117 63 L100 52 L83 63 L88 46 L75 35 L92 35 Z" 
+                  fill="#C87B3A" stroke="#C87B3A" stroke-width="1"/>
+            
+            <!-- المبنى الرئيسي - الجزء العلوي -->
+            <path d="M70 70 L70 50 Q70 45 75 45 L90 45 L90 35 Q90 30 95 30 L105 30 Q110 30 110 35 L110 45 L125 45 Q130 45 130 50 L130 70" 
+                  fill="none" stroke="#C87B3A" stroke-width="3"/>
+            
+            <!-- المبنى الرئيسي - الجدران الجانبية -->
+            <path d="M70 70 L70 140 M130 70 L130 140" 
+                  stroke="#C87B3A" stroke-width="3"/>
+            
+            <!-- البوابة المركزية -->
+            <path d="M85 140 L85 100 Q85 85 100 85 Q115 85 115 100 L115 140" 
+                  fill="none" stroke="#C87B3A" stroke-width="3"/>
+            
+            <!-- الأعمدة الداخلية -->
+            <line x1="95" y1="100" x2="95" y2="140" stroke="#C87B3A" stroke-width="2"/>
+            <line x1="105" y1="100" x2="105" y2="140" stroke="#C87B3A" stroke-width="2"/>
+            
+            <!-- الجدران الخارجية -->
+            <path d="M50 140 L50 90 Q50 80 60 80 L70 80 M130 80 L140 80 Q150 80 150 90 L150 140" 
+                  fill="none" stroke="#C87B3A" stroke-width="3"/>
+            
+            <!-- القاعدة -->
+            <line x1="45" y1="140" x2="155" y2="140" stroke="#C87B3A" stroke-width="4"/>
+            
+            <!-- النص BADYA -->
+            <text x="100" y="170" text-anchor="middle" 
+                  fill="#C87B3A" font-size="18" font-weight="bold" font-family="Arial, sans-serif" letter-spacing="2px">
+                BADYA
+            </text>
+            
+            <!-- النص UNIVERSITY -->
+            <text x="100" y="190" text-anchor="middle" 
+                  fill="#C87B3A" font-size="14" font-family="Arial, sans-serif" letter-spacing="1px">
+                UNIVERSITY
+            </text>
+            
+            <!-- خط تحت النص -->
+            <line x1="60" y1="200" x2="140" y2="200" stroke="#C87B3A" stroke-width="1"/>
+        </svg>
+    </div>
+    
+    <div class="main-container">
+        <div class="portal-card">
+            <div class="portal-header">
+                <button class="header-lang-toggle" onclick="toggleLanguage()">
+                    <i class="fas fa-language"></i> <span id="headerLangToggle">English</span>
+                </button>
+                <div class="university-logo-header">
+                    <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                        <!-- النجمة العلوية -->
+                        <path d="M100 20 L108 35 L125 35 L112 46 L117 63 L100 52 L83 63 L88 46 L75 35 L92 35 Z" 
+                              fill="#C87B3A" stroke="#C87B3A" stroke-width="1"/>
+                        
+                        <!-- المبنى الرئيسي - الجزء العلوي -->
+                        <path d="M70 70 L70 50 Q70 45 75 45 L90 45 L90 35 Q90 30 95 30 L105 30 Q110 30 110 35 L110 45 L125 45 Q130 45 130 50 L130 70" 
+                              fill="none" stroke="#C87B3A" stroke-width="3"/>
+                        
+                        <!-- المبنى الرئيسي - الجدران الجانبية -->
+                        <path d="M70 70 L70 140 M130 70 L130 140" 
+                              stroke="#C87B3A" stroke-width="3"/>
+                        
+                        <!-- البوابة المركزية -->
+                        <path d="M85 140 L85 100 Q85 85 100 85 Q115 85 115 100 L115 140" 
+                              fill="none" stroke="#C87B3A" stroke-width="3"/>
+                        
+                        <!-- الأعمدة الداخلية -->
+                        <line x1="95" y1="100" x2="95" y2="140" stroke="#C87B3A" stroke-width="2"/>
+                        <line x1="105" y1="100" x2="105" y2="140" stroke="#C87B3A" stroke-width="2"/>
+                        
+                        <!-- الجدران الخارجية -->
+                        <path d="M50 140 L50 90 Q50 80 60 80 L70 80 M130 80 L140 80 Q150 80 150 90 L150 140" 
+                              fill="none" stroke="#C87B3A" stroke-width="3"/>
+                        
+                        <!-- القاعدة -->
+                        <line x1="45" y1="140" x2="155" y2="140" stroke="#C87B3A" stroke-width="4"/>
+                        
+                        <!-- النص BADYA -->
+                        <text x="100" y="170" text-anchor="middle" 
+                              fill="#C87B3A" font-size="18" font-weight="bold" font-family="Arial, sans-serif" letter-spacing="2px">
+                            BADYA
+                        </text>
+                        
+                        <!-- النص UNIVERSITY -->
+                        <text x="100" y="190" text-anchor="middle" 
+                              fill="#C87B3A" font-size="14" font-family="Arial, sans-serif" letter-spacing="1px">
+                            UNIVERSITY
+                        </text>
+                    </svg>
+                </div>
+                <h1 id="headerTitle">جامعة باديا</h1>
+                <p id="headerSubtitle">الشات بوت الذكي</p>
+            </div>
+            
+            <!-- قسم تسجيل الدخول -->
+            <div id="loginSection" class="login-section">
+                <h3 class="mb-4"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h3>
+                
+                <div id="alertContainer"></div>
+                
+                <form id="loginForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username" class="form-label">اسم المستخدم</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">كلمة المرور</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary me-3">
+                            <i class="fas fa-sign-in-alt"></i> دخول
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="showRegisterForm()">
+                            <i class="fas fa-user-plus"></i> حساب جديد
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- نموذج التسجيل -->
+                <div id="registerForm" class="hidden mt-4">
+                    <hr>
+                    <h4><i class="fas fa-user-plus"></i> إنشاء حساب جديد</h4>
+                    <form id="newUserForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="newName" class="form-label">الاسم الكامل</label>
+                                <input type="text" class="form-control" id="newName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="newUsername" class="form-label">اسم المستخدم</label>
+                                <input type="text" class="form-control" id="newUsername" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="newEmail" class="form-label">البريد الإلكتروني</label>
+                                <input type="email" class="form-control" id="newEmail">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="newPassword" class="form-label">كلمة المرور</label>
+                                <input type="password" class="form-control" id="newPassword" required>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary me-3">
+                                <i class="fas fa-user-plus"></i> إنشاء الحساب
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="hideRegisterForm()">
+                                إلغاء
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- قسم الشات -->
+            <div id="chatSection" class="chat-section hidden">
+                <div id="userInfo" class="user-info">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4><i class="fas fa-user"></i> <span id="welcomeText">مرحباً</span> <span id="userName"></span></h4>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-light btn-sm me-2" onclick="toggleLanguage()">
+                                <i class="fas fa-language"></i> <span id="langToggle">English</span>
+                            </button>
+                            <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> <span id="logoutText">تسجيل الخروج</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mb-4"><i class="fas fa-comments"></i> <span id="chatTitle">الشات الذكي</span></h3>
+                
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message bot">
+                        <strong>🤖 <span id="assistantName">المساعد الذكي</span>:</strong><br>
+                        <span id="welcomeMessage">مرحباً! أنا هنا لمساعدتك في أي استفسار عن جامعة باديا. اسأل أي سؤال!</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" id="messageInput" class="form-control" placeholder="اكتب سؤالك هنا..." onkeypress="handleKeyPress(event)">
+                    <button class="btn btn-secondary me-2" id="micButton" onclick="toggleRecording()">
+                        <i class="fas fa-microphone" id="micIcon"></i>
+                    </button>
+                    <button class="btn btn-primary" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i> <span id="sendText">إرسال</span>
+                    </button>
+                </div>
+                
+                <!-- مؤشر التسجيل الصوتي -->
+                <div id="recordingIndicator" class="text-center mt-2 hidden">
+                    <div class="text-danger">
+                        <i class="fas fa-circle" style="animation: blink 1s infinite;"></i>
+                        <span id="recordingText">جاري التسجيل...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentUser = null;
+        let currentLanguage = 'ar';
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        // النصوص متعددة اللغات
+        const translations = {
+            ar: {
+                headerTitle: 'جامعة باديا',
+                headerSubtitle: 'الشات بوت الذكي',
+                welcomeText: 'مرحباً',
+                logoutText: 'تسجيل الخروج',
+                chatTitle: 'الشات الذكي',
+                assistantName: 'المساعد الذكي',
+                welcomeMessage: 'مرحباً! أنا هنا لمساعدتك في أي استفسار عن جامعة باديا. اسأل أي سؤال!',
+                sendText: 'إرسال',
+                recordingText: 'جاري التسجيل...',
+                langToggle: 'English',
+                headerLangToggle: 'English',
+                inputPlaceholder: 'اكتب سؤالك هنا...'
+            },
+            en: {
+                headerTitle: 'Badya University',
+                headerSubtitle: 'Smart Chatbot',
+                welcomeText: 'Welcome',
+                logoutText: 'Logout',
+                chatTitle: 'Smart Chat',
+                assistantName: 'AI Assistant',
+                welcomeMessage: 'Hello! I\'m here to help you with any questions about Badya University. Ask me anything!',
+                sendText: 'Send',
+                recordingText: 'Recording...',
+                langToggle: 'العربية',
+                headerLangToggle: 'العربية',
+                inputPlaceholder: 'Type your question here...'
+            }
+        };
+
+        // تغيير اللغة
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'ar' ? 'en' : 'ar';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const texts = translations[currentLanguage];
+            
+            // تحديث الهيدر
+            document.getElementById('headerTitle').textContent = texts.headerTitle;
+            document.getElementById('headerSubtitle').textContent = texts.headerSubtitle;
+            document.getElementById('headerLangToggle').textContent = texts.headerLangToggle;
+            
+            // تحديث باقي العناصر
+            if (document.getElementById('welcomeText')) {
+                document.getElementById('welcomeText').textContent = texts.welcomeText;
+            }
+            if (document.getElementById('logoutText')) {
+                document.getElementById('logoutText').textContent = texts.logoutText;
+            }
+            if (document.getElementById('chatTitle')) {
+                document.getElementById('chatTitle').textContent = texts.chatTitle;
+            }
+            if (document.getElementById('assistantName')) {
+                document.getElementById('assistantName').textContent = texts.assistantName;
+            }
+            if (document.getElementById('welcomeMessage')) {
+                document.getElementById('welcomeMessage').textContent = texts.welcomeMessage;
+            }
+            if (document.getElementById('sendText')) {
+                document.getElementById('sendText').textContent = texts.sendText;
+            }
+            if (document.getElementById('recordingText')) {
+                document.getElementById('recordingText').textContent = texts.recordingText;
+            }
+            if (document.getElementById('langToggle')) {
+                document.getElementById('langToggle').textContent = texts.langToggle;
+            }
+            if (document.getElementById('messageInput')) {
+                document.getElementById('messageInput').placeholder = texts.inputPlaceholder;
+            }
+            
+            // تغيير اتجاه النص
+            document.body.className = currentLanguage === 'ar' ? 'rtl' : 'ltr';
+        }
+
+        // تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const alertContainer = document.getElementById('alertContainer');
+            
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    currentUser = {
+                        ...data.user,
+                        token: data.token || data.access_token
+                    };
+                    showChatSection();
+                    alertContainer.innerHTML = '';
+                } else {
+                    showAlert(data.error || 'خطأ في تسجيل الدخول', 'danger');
+                }
+            } catch (error) {
+                showAlert('خطأ في الاتصال بالخادم', 'danger');
+            }
+        });
+
+        // إنشاء حساب جديد
+        document.getElementById('newUserForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('newName').value,
+                username: document.getElementById('newUsername').value,
+                email: document.getElementById('newEmail').value,
+                password: document.getElementById('newPassword').value
+            };
+            
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    showAlert('تم إنشاء الحساب بنجاح! يمكنك تسجيل الدخول الآن', 'success');
+                    hideRegisterForm();
+                    document.getElementById('newUserForm').reset();
+                } else {
+                    showAlert(data.error || 'خطأ في إنشاء الحساب', 'danger');
+                }
+            } catch (error) {
+                showAlert('خطأ في الاتصال بالخادم', 'danger');
+            }
+        });
+
+        // التسجيل الصوتي
+        async function toggleRecording() {
+            if (isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                // إظهار شريط الموجات الصوتية
+                showAudioVisualizer();
+
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    audio: {
+                        sampleRate: 44100,
+                        channelCount: 1,
+                        echoCancellation: true,
+                        noiseSuppression: true
+                    }
+                });
+
+                mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'audio/webm;codecs=opus'
+                });
+
+                audioChunks = [];
+                
+                mediaRecorder.ondataavailable = (event) => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    processRecording();
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+
+                // تحديث واجهة المستخدم
+                document.getElementById('micButton').classList.add('recording');
+                document.getElementById('micIcon').className = 'fas fa-stop';
+
+            } catch (error) {
+                console.error('Recording error:', error);
+                hideAudioVisualizer();
+                alert('خطأ في الوصول للميكروفون');
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+                isRecording = false;
+
+                // تحديث واجهة المستخدم
+                document.getElementById('micButton').classList.remove('recording');
+                document.getElementById('micIcon').className = 'fas fa-microphone';
+
+                // إخفاء شريط الموجات الصوتية
+                hideAudioVisualizer();
+            }
+        }
+
+        async function processRecording() {
+            if (audioChunks.length === 0) return;
+
+            // تحديث حالة الشريط الصوتي
+            if (currentLanguage === 'ar') {
+                document.getElementById('visualizerTitle').textContent = 'معالجة الصوت';
+                document.getElementById('visualizerSubtitle').textContent = 'يرجى الانتظار...';
+                document.getElementById('visualizerStatus').innerHTML = '<div class="pulse"></div> جاري تحليل الصوت...';
+                document.getElementById('cancelText').textContent = 'إلغاء';
+            } else {
+                document.getElementById('visualizerTitle').textContent = 'Processing Audio';
+                document.getElementById('visualizerSubtitle').textContent = 'Please wait...';
+                document.getElementById('visualizerStatus').innerHTML = '<div class="pulse"></div> Analyzing audio...';
+                document.getElementById('cancelText').textContent = 'Cancel';
+            }
+
+            // إضافة class processing للأمواج الصوتية
+            document.querySelector('.audio-bars').classList.add('processing');
+
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'recording.webm');
+
+            // إضافة JWT token إذا كان متوفر
+            const headers = {};
+            if (currentUser && currentUser.token) {
+                headers['Authorization'] = `Bearer ${currentUser.token}`;
+            }
+
+            try {
+                const response = await fetch('/api/audio-chat', {
+                    method: 'POST',
+                    headers: headers,
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.response) {
+                    addMessage(data.transcript || 'تسجيل صوتي', 'user');
+                    addMessage(data.response, 'bot');
+                } else {
+                    addMessage(data.error || 'خطأ في معالجة التسجيل الصوتي', 'bot');
+                }
+            } catch (error) {
+                console.error('Audio processing error:', error);
+                addMessage('خطأ في معالجة التسجيل الصوتي', 'bot');
+            } finally {
+                // إخفاء الشريط الصوتي بعد المعالجة
+                setTimeout(() => {
+                    hideAudioVisualizer();
+                }, 1000);
+            }
+        }
+
+        // إرسال رسالة
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+            
+            // إضافة رسالة المستخدم
+            addMessage(message, 'user');
+            messageInput.value = '';
+            
+            // إضافة مؤشر التحميل
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message bot';
+            loadingDiv.innerHTML = '<div class="loading"></div> جاري الكتابة...';
+            loadingDiv.id = 'loading-message';
+            document.getElementById('chatMessages').appendChild(loadingDiv);
+            scrollToBottom();
+            
+            try {
+                const headers = { 'Content-Type': 'application/json' };
+                
+                // إضافة JWT token إذا كان متوفر
+                if (currentUser && currentUser.token) {
+                    headers['Authorization'] = `Bearer ${currentUser.token}`;
+                }
+                
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ message })
+                });
+                
+                const data = await response.json();
+                
+                // إزالة مؤشر التحميل
+                document.getElementById('loading-message').remove();
+                
+                if (response.ok && data.response) {
+                    addMessage(data.response, 'bot');
+                } else {
+                    addMessage(data.error || 'حدث خطأ في المعالجة', 'bot');
+                }
+            } catch (error) {
+                document.getElementById('loading-message').remove();
+                addMessage('خطأ في الاتصال بالخادم', 'bot');
+            }
+        }
+
+        // إضافة رسالة للشات
+        function addMessage(text, type) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            if (type === 'user') {
+                messageDiv.innerHTML = `<strong>👤 أنت:</strong><br>${text}`;
+            } else {
+                messageDiv.innerHTML = `<strong>🤖 المساعد:</strong><br>${text}`;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // التمرير للأسفل
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // إظهار قسم الشات
+        function showChatSection() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('chatSection').classList.remove('hidden');
+            document.getElementById('userName').textContent = currentUser.name;
+        }
+
+        // تسجيل الخروج
+        async function logout() {
+            try {
+                await fetch('/api/logout', { method: 'POST' });
+            } catch (error) {
+                console.log('Logout error:', error);
+            }
+            
+            currentUser = null;
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('chatSection').classList.add('hidden');
+            document.getElementById('loginForm').reset();
+            document.getElementById('chatMessages').innerHTML = `
+                <div class="message bot">
+                    <strong>🤖 المساعد الذكي:</strong><br>
+                    مرحباً! أنا هنا لمساعدتك في أي استفسار عن جامعة باديا. اسأل أي سؤال!
+                </div>
+            `;
+        }
+
+        // إظهار نموذج التسجيل
+        function showRegisterForm() {
+            document.getElementById('registerForm').classList.remove('hidden');
+        }
+
+        // إخفاء نموذج التسجيل
+        function hideRegisterForm() {
+            document.getElementById('registerForm').classList.add('hidden');
+        }
+
+        // إظهار التنبيهات
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+
+        // التعامل مع الضغط على Enter
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // إخفاء شريط الموجات الصوتية
+        function hideAudioVisualizer() {
+            const visualizer = document.getElementById('audioVisualizer');
+            if (visualizer && visualizer.classList.contains('show')) {
+                visualizer.classList.add('fade-out');
+                setTimeout(() => {
+                    visualizer.classList.remove('show', 'fade-out');
+                    stopRecording();
+                }, 300);
+            }
+        }
+
+        // إظهار شريط الموجات الصوتية
+        function showAudioVisualizer() {
+            const visualizer = document.getElementById('audioVisualizer');
+            const audioBars = document.querySelector('.audio-bars');
+
+            visualizer.classList.add('show');
+
+            // إزالة class processing للأمواج الصوتية
+            if (audioBars) {
+                audioBars.classList.remove('processing');
+            }
+
+            // تحديث النصوص حسب اللغة
+            if (currentLanguage === 'ar') {
+                document.getElementById('visualizerTitle').textContent = 'جاري التسجيل الصوتي';
+                document.getElementById('visualizerSubtitle').textContent = 'يرجى التحدث بوضوح...';
+                document.getElementById('visualizerStatus').innerHTML = '<div class="pulse"></div> يتم الاستعداد للتسجيل...';
+                document.getElementById('cancelText').textContent = 'إلغاء';
+            } else {
+                document.getElementById('visualizerTitle').textContent = 'Recording Audio';
+                document.getElementById('visualizerSubtitle').textContent = 'Please speak clearly...';
+                document.getElementById('visualizerStatus').innerHTML = '<div class="pulse"></div> Preparing to record...';
+                document.getElementById('cancelText').textContent = 'Cancel';
+            }
+        }
+
+        // إخفاء شريط الموجات الصوتية عند النقر خارج الصندوق
+        document.getElementById('audioVisualizer').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideAudioVisualizer();
+            }
+        });
+    </script>
+
+    <!-- شريط الموجات الصوتية -->
+    <div id="audioVisualizer" class="audio-visualizer">
+        <div class="audio-visualizer-content">
+            <div class="audio-visualizer-title" id="visualizerTitle">جاري التسجيل الصوتي</div>
+            <div class="audio-visualizer-subtitle" id="visualizerSubtitle">يرجى التحدث بوضوح...</div>
+
+            <div class="audio-bars">
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+                <div class="audio-bar"></div>
+            </div>
+
+            <div class="audio-visualizer-status">
+                <div class="pulse"></div>
+                <span id="visualizerStatus">يتم معالجة الصوت...</span>
+            </div>
+
+            <button class="audio-visualizer-close" onclick="hideAudioVisualizer()">
+                <span id="cancelText">إلغاء</span>
+            </button>
+        </div>
+    </div>
+</body>
+</html>

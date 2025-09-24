@@ -1,0 +1,1171 @@
+{#
+  جامعة باديا - لوحة تحكم المشرفين
+  تم تطويره بواسطة: عبدالخالق محمد
+  حقوق النشر © 2024 - جميع الحقوق محفوظة
+
+  هذا الكود ملك حصري لجامعة باديا ويحظر نسخه أو توزيعه بدون إذن كتابي مسبق
+#}
+
+{% extends "base.html" %}
+
+{% block title %}لوحة الإدارة - جامعة باديا{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hide the side logo in admin dashboard */
+    .university-logo {
+        display: none !important;
+    }
+    
+    /* Style for navbar logo */
+    .navbar-logo {
+        height: 40px;
+        margin-right: 10px;
+    }
+    
+    .navbar-brand {
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+    }
+    
+    .dashboard-card {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        border: 1px solid #e0f2fe;
+        border-radius: 15px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(14, 165, 233, 0.15);
+        border-color: #bae6fd;
+    }
+    
+    .nav-tabs {
+        border: none;
+        background: #f0f9ff;
+        border-radius: 12px;
+        padding: 5px;
+    }
+    
+    .nav-tabs .nav-link {
+        border: none;
+        border-radius: 8px;
+        color: #0ea5e9;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-tabs .nav-link.active {
+        background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+    }
+    
+    .table {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #e0f2fe;
+    }
+    
+    .table thead th {
+        background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+        color: white;
+        border: none;
+        font-weight: 500;
+    }
+    
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+    
+    .table tbody tr:hover {
+        background: rgba(102, 126, 234, 0.1);
+        transform: scale(1.01);
+    }
+    
+    .btn-group .btn {
+        border-radius: 8px;
+        margin: 0 2px;
+    }
+    
+    .alert {
+        border: none;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 0.2rem rgba(14, 165, 233, 0.25);
+        border-color: #0ea5e9;
+    }
+    
+    .stats-card {
+        background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(14, 165, 233, 0.15);
+    }
+    
+    .stats-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            <div class="card">
+                <nav class="navbar navbar-expand-lg navbar-dark" style="background: #1e3a8a !important;">
+                    <h5><i class="fas fa-user-shield me-2"></i>لوحة الإدارة</h5>
+                </nav>
+                <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action active" style="background-color: #dbeafe; color: #1e40af; border-color: #93c5fd;" onclick="showSection('chat')">
+                        <i class="fas fa-comments me-2"></i>الشات
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" style="color: #0c4a6e;" onmouseover="this.style.backgroundColor='#f0f9ff'" onmouseout="this.style.backgroundColor='white'" onclick="showSection('users')">
+                        <i class="fas fa-users me-2"></i>إدارة المستخدمين
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" style="color: #0c4a6e;" onmouseover="this.style.backgroundColor='#f0f9ff'" onmouseout="this.style.backgroundColor='white'" onclick="showSection('analytics')">
+                        <i class="fas fa-chart-bar me-2"></i>تحليل الأسئلة
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" style="color: #0c4a6e;" onmouseover="this.style.backgroundColor='#f0f9ff'" onmouseout="this.style.backgroundColor='white'" onclick="showSection('logs')">
+                        <i class="fas fa-list-alt me-2"></i>سجل الأنشطة
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" style="color: #0c4a6e;" onmouseover="this.style.backgroundColor='#f0f9ff'" onmouseout="this.style.backgroundColor='white'" onclick="showSection('settings')">
+                        <i class="fas fa-cog me-2"></i>الإعدادات
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <!-- Chat Section -->
+            <div id="chatSection" class="section">
+                <div class="chat-box">
+                    <div class="chat-header" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);">
+                        <h4 style="color: white;"><i class="fas fa-comments me-2"></i>الشات بوت - وضع الإدارة</h4>
+                        <p class="mb-0" style="color: rgba(255,255,255,0.9);">اختبر الشات بوت وتفاعل معه</p>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot-message" style="background-color: #f0f9ff; color: #0c4a6e; border-right: 4px solid #0ea5e9;">
+                            <i class="fas fa-robot me-2" style="color: #0ea5e9;"></i>
+                            مرحباً بك في وضع الإدارة! كيف يمكنني مساعدتك؟
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input">
+                        <div class="row g-2">
+                            <div class="col">
+                                <input type="text" class="form-control" id="adminMessageInput" placeholder="اكتب رسالتك هنا..." onkeypress="handleAdminKeyPress(event)">
+                            </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary" onclick="sendAdminMessage()" style="background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%); border: none;">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Users Management Section -->
+            <div id="usersSection" class="section" style="display: none;">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5><i class="fas fa-users me-2"></i>إدارة المستخدمين</h5>
+                        <button class="btn btn-primary" onclick="showAddUserModal()" style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); border: none;">
+                            <i class="fas fa-user-plus me-1"></i>إضافة مستخدم
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="usersTable">
+                                <thead>
+                                    <tr>
+                                        <th>الاسم</th>
+                                        <th>اسم المستخدم</th>
+                                        <th>البريد الإلكتروني</th>
+                                        <th>الدور</th>
+                                        <th>تاريخ الإنشاء</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <!-- Users will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Analytics Section -->
+            <div id="analyticsSection" class="section" style="display: none;">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="fas fa-chart-bar me-2"></i>تحليل الأسئلة والإحصائيات</h5>
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    يتم تسجيل الأسئلة تلقائياً عند طرحها في الشات. فقط الأسئلة المتعلقة بجامعة باديا يتم تحليلها.
+                                </small>
+                            </div>
+                            <div class="card-body">
+                                <!-- Statistics Cards -->
+                                <div class="row mb-4">
+                                    <div class="col-md-3">
+                                        <div class="stats-card">
+                                            <div class="stats-number" id="totalQuestions">0</div>
+                                            <div>إجمالي الأسئلة</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stats-card" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
+                                            <div class="stats-number" id="topCategory">-</div>
+                                            <div>أكثر الفئات</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stats-card" style="background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);">
+                                            <div class="stats-number" id="topKeyword">-</div>
+                                            <div>أكثر الكلمات</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="stats-card" style="background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);">
+                                            <div class="stats-number" id="activeUsers">0</div>
+                                            <div>المستخدمين النشطين</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Analytics Tabs -->
+                                <ul class="nav nav-tabs" id="analyticsTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories" type="button" role="tab">
+                                            <i class="fas fa-tags me-1"></i>الفئات
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="keywords-tab" data-bs-toggle="tab" data-bs-target="#keywords" type="button" role="tab">
+                                            <i class="fas fa-key me-1"></i>الكلمات المفتاحية
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="frequent-tab" data-bs-toggle="tab" data-bs-target="#frequent" type="button" role="tab">
+                                            <i class="fas fa-repeat me-1"></i>الأسئلة المتكررة
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="users-activity-tab" data-bs-toggle="tab" data-bs-target="#users-activity" type="button" role="tab">
+                                            <i class="fas fa-users me-1"></i>نشاط المستخدمين
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="all-questions-tab" data-bs-toggle="tab" data-bs-target="#all-questions" type="button" role="tab">
+                                            <i class="fas fa-list me-1"></i>جميع الأسئلة
+                                        </button>
+                                    </li>
+                                </ul>
+                                
+                                <div class="tab-content mt-3" id="analyticsTabContent">
+                                    <!-- Categories Tab -->
+                                    <div class="tab-pane fade show active" id="categories" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>الفئة</th>
+                                                        <th>عدد الأسئلة</th>
+                                                        <th>النسبة المئوية</th>
+                                                        <th>مثال على السؤال</th>
+                                                        <th>الرسم البياني</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="categoriesTableBody">
+                                                    <!-- Categories will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Keywords Tab -->
+                                    <div class="tab-pane fade" id="keywords" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>الكلمة المفتاحية</th>
+                                                        <th>عدد التكرارات</th>
+                                                        <th>النسبة المئوية</th>
+                                                        <th>الرسم البياني</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="keywordsTableBody">
+                                                    <!-- Keywords will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Frequent Questions Tab -->
+                                    <div class="tab-pane fade" id="frequent" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>السؤال</th>
+                                                        <th>التكرار</th>
+                                                        <th>النسبة المئوية</th>
+                                                        <th>الفئة</th>
+                                                        <th>آخر مرة</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="frequentQuestionsTableBody">
+                                                    <!-- Frequent questions will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Users Activity Tab -->
+                                    <div class="tab-pane fade" id="users-activity" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>المستخدم</th>
+                                                        <th>عدد الأسئلة</th>
+                                                        <th>النسبة المئوية</th>
+                                                        <th>الرسم البياني</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="usersActivityTableBody">
+                                                    <!-- User activity will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- All Questions Tab -->
+                                    <div class="tab-pane fade" id="all-questions" role="tabpanel">
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" id="questionSearch" placeholder="البحث في الأسئلة..." onkeyup="filterQuestions()">
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>السؤال</th>
+                                                        <th>الفئة</th>
+                                                        <th>الكلمات المفتاحية</th>
+                                                        <th>المستخدم</th>
+                                                        <th>التاريخ</th>
+                                                        <th>طول الإجابة</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="allQuestionsTableBody">
+                                                    <!-- All questions will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Logs Section -->
+            <div id="logsSection" class="section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-list-alt me-2"></i>سجل الأنشطة</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>الوقت</th>
+                                        <th>النوع</th>
+                                        <th>الرسالة</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="logsTableBody">
+                                    <!-- Logs will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Settings Section -->
+            <div id="settingsSection" class="section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-cog me-2"></i>إعدادات النظام</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <h6><i class="fas fa-shield-check me-2"></i>نظام الحماية الذكي نشط</h6>
+                            <p class="mb-2">
+                                🧠 <strong>نظام ذكي ومرن!</strong> يقبل أي ملف بيانات جديد لجامعة باديا ويفحص المحتوى تلقائياً.
+                                <br>
+                                ✅ <strong>يقبل السياق الإيجابي:</strong> مثل "باديا تقبل طلاب من الأزهر" أو "تحويل من القاهرة إلى باديا".
+                                <br>
+                                🔒 <strong>حماية ذكية:</strong> يرفض فقط البيانات التي تتحدث عن جامعات أخرى كموضوع أساسي.
+                            </p>
+                        </div>
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle me-2"></i>كيفية استخدام النظام المرن</h6>
+                            <p class="mb-0">
+                                📁 <strong>يمكنك تحميل أي ملف Excel جديد:</strong> ضع المسار في الحقل أدناه
+                                <br>
+                                ✅ <strong>أمثلة مقبولة:</strong> "باديا تقبل من الأزهر"، "تحويل من القاهرة لباديا"، "باديا أفضل من الأمريكية"
+                                <br>
+                                ❌ <strong>أمثلة مرفوضة:</strong> كتالوج جامعة القاهرة، دليل الأزهر، معلومات الجامعة الأمريكية
+                                <br>
+                                🤖 <strong>الفحص تلقائي:</strong> GPT-4 يحلل المحتوى ويقرر القبول أو الرفض
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="settingsForm">
+                            <div class="mb-3">
+                                <label class="form-label">مسار ملف المعرفة</label>
+                                <input type="text" class="form-control" id="knowledgePath" placeholder="مسار ملف Excel" value="badya_clean_data.xlsx">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">الحد الأقصى للأحرف</label>
+                                <input type="number" class="form-control" id="knowledgeLimit" value="50000">
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="summarizeKnowledge">
+                                    <label class="form-check-label" for="summarizeKnowledge">
+                                        تلخيص المعرفة تلقائياً
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="reloadKnowledge()">
+                                <i class="fas fa-sync-alt me-1"></i>إعادة تحميل المعرفة
+                            </button>
+                            <div class="mt-3">
+                                <div class="alert alert-success" style="display: none;" id="successAlert">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <span id="successMessage"></span>
+                                </div>
+                                <div class="alert alert-danger" style="display: none;" id="errorAlert">
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                    <span id="errorMessage"></span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">إضافة مستخدم جديد</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="mb-3">
+                        <label class="form-label">الاسم الكامل</label>
+                        <input type="text" class="form-control" id="newUserName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">اسم المستخدم</label>
+                        <input type="text" class="form-control" id="newUserUsername" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">البريد الإلكتروني</label>
+                        <input type="email" class="form-control" id="newUserEmail">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">كلمة المرور</label>
+                        <input type="password" class="form-control" id="newUserPassword" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">الدور</label>
+                        <select class="form-control" id="newUserRole">
+                            <option value="user">مستخدم</option>
+                            <option value="admin">إدارة</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                <button type="button" class="btn btn-primary" onclick="addUser()">إضافة</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentSection = 'chat';
+
+    function showSection(sectionName) {
+        // Hide all sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.display = 'none';
+        });
+        
+        // Show selected section
+        document.getElementById(sectionName + 'Section').style.display = 'block';
+        
+        // Update sidebar
+        document.querySelectorAll('.list-group-item-action').forEach(item => {
+            item.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        currentSection = sectionName;
+        
+        // Load section data
+        if (sectionName === 'users') {
+            loadUsers();
+        } else if (sectionName === 'logs') {
+            loadLogs();
+        } else if (sectionName === 'analytics') {
+            loadAnalytics();
+        }
+    }
+
+    // Chat functionality for admin
+    function handleAdminKeyPress(event) {
+        if (event.key === 'Enter') {
+            sendAdminMessage();
+        }
+    }
+
+    function addAdminMessage(content, isUser = false) {
+        const messagesContainer = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+        
+        if (isUser) {
+            messageDiv.innerHTML = `<i class="fas fa-user-shield me-2"></i>${content}`;
+        } else {
+            messageDiv.innerHTML = `<i class="fas fa-robot me-2"></i>${content}`;
+        }
+        
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    async function sendAdminMessage() {
+        const messageInput = document.getElementById('adminMessageInput');
+        const message = messageInput.value.trim();
+        
+        if (!message) return;
+        
+        addAdminMessage(message, true);
+        messageInput.value = '';
+        
+        try {
+            const response = await apiCall('/api/chat', {
+                method: 'POST',
+                body: JSON.stringify({ message })
+            });
+            
+            if (response) {
+                const data = await response.json();
+                if (response.ok) {
+                    addAdminMessage(data.answer);
+                } else {
+                    addAdminMessage(data.error || 'حدث خطأ في الإرسال');
+                }
+            }
+        } catch (error) {
+            addAdminMessage('حدث خطأ في الاتصال بالخادم');
+        }
+    }
+
+    // User management functions
+    async function loadUsers() {
+        try {
+            const response = await apiCall('/api/users');
+            if (response && response.ok) {
+                const data = await response.json();
+                displayUsers(data.users || []);
+            }
+        } catch (error) {
+            console.error('Failed to load users:', error);
+        }
+    }
+
+    function displayUsers(users) {
+        const tbody = document.getElementById('usersTableBody');
+        tbody.innerHTML = '';
+        
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.name}</td>
+                <td>${user.username}</td>
+                <td>${user.email || '-'}</td>
+                <td><span class="badge ${user.role === 'admin' ? 'bg-danger' : 'bg-primary'}">${user.role === 'admin' ? 'إدارة' : 'مستخدم'}</span></td>
+                <td>${new Date(user.created_at).toLocaleDateString('ar-EG')}</td>
+                <td>
+                    <button class="btn btn-sm btn-danger" onclick="deleteUser(${user.id}, '${user.username}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function showAddUserModal() {
+        const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
+        modal.show();
+    }
+
+    async function addUser() {
+        const name = document.getElementById('newUserName').value;
+        const username = document.getElementById('newUserUsername').value;
+        const email = document.getElementById('newUserEmail').value;
+        const password = document.getElementById('newUserPassword').value;
+        const role = document.getElementById('newUserRole').value;
+        
+        try {
+            const response = await apiCall('/api/users', {
+                method: 'POST',
+                body: JSON.stringify({ name, username, email, password, role })
+            });
+            
+            if (response && response.ok) {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+                modal.hide();
+                document.getElementById('addUserForm').reset();
+                loadUsers();
+                alert('تم إضافة المستخدم بنجاح');
+            } else {
+                const data = await response.json();
+                alert(data.error || 'حدث خطأ في إضافة المستخدم');
+            }
+        } catch (error) {
+            alert('حدث خطأ في الاتصال بالخادم');
+        }
+    }
+
+    async function deleteUser(userId, username) {
+        if (!confirm(`هل أنت متأكد من حذف المستخدم "${username}"؟`)) {
+            return;
+        }
+        
+        try {
+            const response = await apiCall(`/api/users/${userId}`, {
+                method: 'DELETE'
+            });
+            
+            if (response && response.ok) {
+                loadUsers();
+                alert('تم حذف المستخدم بنجاح');
+            } else {
+                const data = await response.json();
+                alert(data.error || 'حدث خطأ في حذف المستخدم');
+            }
+        } catch (error) {
+            alert('حدث خطأ في الاتصال بالخادم');
+        }
+    }
+
+    // Logs functionality
+    async function loadLogs() {
+        try {
+            const response = await apiCall('/api/logs');
+            if (response && response.ok) {
+                const data = await response.json();
+                displayLogs(data.items || []);
+            }
+        } catch (error) {
+            console.error('Failed to load logs:', error);
+        }
+    }
+
+    function displayLogs(logs) {
+        const tbody = document.getElementById('logsTableBody');
+        tbody.innerHTML = '';
+        
+        logs.forEach(log => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${new Date(log.timestamp).toLocaleString('ar-EG', {
+                    year: 'numeric',
+                    month: '2-digit', 
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                })}</td>
+                <td><span class="badge ${log.type === 'audio' ? 'bg-info' : 'bg-secondary'}">${log.type === 'audio' ? 'صوتي' : 'نص'}</span></td>
+                <td>${log.message.substring(0, 150)}${log.message.length > 150 ? '...' : ''}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    // Settings functionality
+    async function reloadKnowledge() {
+        // إخفاء الرسائل السابقة
+        document.getElementById('successAlert').style.display = 'none';
+        document.getElementById('errorAlert').style.display = 'none';
+        
+        // العثور على الزر
+        const button = document.querySelector('button[onclick="reloadKnowledge()"]');
+        const originalText = button ? button.innerHTML : '';
+        
+        try {
+            const path = document.getElementById('knowledgePath').value;
+            const limit = document.getElementById('knowledgeLimit').value;
+            
+            // تعطيل الزر أثناء التحميل
+            if (button) {
+                button.disabled = true;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>جاري التحميل...';
+            }
+            
+            const response = await apiCall('/api/reload-knowledge', {
+                method: 'POST',
+                body: JSON.stringify({
+                    path: path,
+                    KNOWLEDGE_MAX_CHARS: parseInt(limit)
+                })
+            });
+            
+            // إعادة تفعيل الزر
+            if (button) {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        
+            if (response && response.ok) {
+                const data = await response.json();
+                
+                // إظهار رسالة النجاح
+                const successMsg = `تم إعادة تحميل المعرفة بنجاح! عدد الأحرف: ${data.chars} | المسار: ${data.path} | ${data.security_status || 'البيانات آمنة'}`;
+                document.getElementById('successMessage').textContent = successMsg;
+                document.getElementById('successAlert').style.display = 'block';
+                
+                // إخفاء الرسالة بعد 10 ثوان
+                setTimeout(() => {
+                    document.getElementById('successAlert').style.display = 'none';
+                }, 10000);
+                
+            } else {
+                const data = await response.json();
+                
+                let errorMsg = '';
+                if (data.security_error) {
+                    errorMsg = `خطأ أمان: ${data.error} - ${data.message}`;
+                } else {
+                    errorMsg = data.error || 'حدث خطأ في إعادة تحميل المعرفة';
+                }
+                
+                document.getElementById('errorMessage').textContent = errorMsg;
+                document.getElementById('errorAlert').style.display = 'block';
+            }
+        } catch (error) {
+            // إعادة تفعيل الزر في حالة الخطأ
+            if (button) {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+            
+            console.error('Reload knowledge error:', error);
+            
+            const errorMsg = `خطأ في الاتصال: ${error.message || error}. تحقق من وحدة التحكم للمزيد من التفاصيل.`;
+            document.getElementById('errorMessage').textContent = errorMsg;
+            document.getElementById('errorAlert').style.display = 'block';
+        }
+    }
+
+    // Analytics functionality
+    async function loadAnalytics() {
+        try {
+            // Load main analytics data
+            const response = await apiCall('/api/questions-analytics');
+            if (response && response.ok) {
+                const data = await response.json();
+                displayAnalytics(data);
+            }
+            
+            // Load frequent questions
+            const summaryResponse = await apiCall('/api/questions-summary');
+            if (summaryResponse && summaryResponse.ok) {
+                const summaryData = await summaryResponse.json();
+                displayFrequentQuestions(summaryData.frequent_questions || []);
+            }
+            
+            // Load all questions
+            const allQuestionsResponse = await apiCall('/api/all-questions');
+            if (allQuestionsResponse && allQuestionsResponse.ok) {
+                const allQuestionsData = await allQuestionsResponse.json();
+                displayAllQuestions(allQuestionsData.all_questions || []);
+            }
+        } catch (error) {
+            console.error('Failed to load analytics:', error);
+        }
+    }
+
+    function displayAnalytics(data) {
+        // Update statistics cards
+        document.getElementById('totalQuestions').textContent = data.total_questions || 0;
+        document.getElementById('topCategory').textContent = data.categories_stats[0]?.category?.substring(0, 10) || '-';
+        document.getElementById('topKeyword').textContent = data.keywords_stats[0]?.keyword || '-';
+        document.getElementById('activeUsers').textContent = data.users_stats.length || 0;
+        
+        // Display categories
+        displayCategoriesStats(data.categories_stats || []);
+        
+        // Display keywords
+        displayKeywordsStats(data.keywords_stats || []);
+        
+        // Display users activity
+        displayUsersActivity(data.users_stats || []);
+        
+        // Show message if no data available
+        if (data.total_questions === 0) {
+            showNoDataMessage();
+        }
+    }
+
+    function showNoDataMessage() {
+        // Show message in categories table
+        const categoriesBody = document.getElementById('categoriesTableBody');
+        categoriesBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center text-muted py-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    لا توجد أسئلة مسجلة بعد. ابدأ بطرح أسئلة في الشات لرؤية التحليلات هنا.
+                </td>
+            </tr>
+        `;
+        
+        // Show message in other tables
+        const keywordsBody = document.getElementById('keywordsTableBody');
+        keywordsBody.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center text-muted py-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    لا توجد كلمات مفتاحية مسجلة بعد.
+                </td>
+            </tr>
+        `;
+        
+        const frequentBody = document.getElementById('frequentQuestionsTableBody');
+        frequentBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center text-muted py-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    لا توجد أسئلة متكررة بعد.
+                </td>
+            </tr>
+        `;
+        
+        const usersBody = document.getElementById('usersActivityTableBody');
+        usersBody.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center text-muted py-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    لا يوجد نشاط مستخدمين مسجل بعد.
+                </td>
+            </tr>
+        `;
+        
+        const allQuestionsBody = document.getElementById('allQuestionsTableBody');
+        allQuestionsBody.innerHTML = `
+            <tr>
+                <td colspan="6" class="text-center text-muted py-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    لا توجد أسئلة مسجلة بعد. ابدأ بطرح أسئلة في الشات لرؤيتها هنا.
+                </td>
+            </tr>
+        `;
+    }
+
+    function displayCategoriesStats(categories) {
+        const tbody = document.getElementById('categoriesTableBody');
+        tbody.innerHTML = '';
+        
+        if (categories.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        لا توجد فئات مسجلة بعد.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        categories.forEach((category, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <span class="badge bg-primary">${index + 1}</span>
+                    ${category.category}
+                </td>
+                <td><strong>${category.count}</strong></td>
+                <td>
+                    <span class="badge bg-success">${category.percentage}%</span>
+                </td>
+                <td>
+                    <div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" 
+                         title="${category.sample_question || 'لا يوجد مثال'}">
+                        <small class="text-muted">${category.sample_question || 'لا يوجد مثال'}</small>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-info" role="progressbar" 
+                             style="width: ${category.percentage}%" 
+                             aria-valuenow="${category.percentage}" 
+                             aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayKeywordsStats(keywords) {
+        const tbody = document.getElementById('keywordsTableBody');
+        tbody.innerHTML = '';
+        
+        if (keywords.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        لا توجد كلمات مفتاحية مسجلة بعد.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        keywords.forEach((keyword, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <span class="badge bg-warning">${index + 1}</span>
+                    <strong>${keyword.keyword}</strong>
+                </td>
+                <td>${keyword.count}</td>
+                <td>
+                    <span class="badge bg-info">${keyword.percentage}%</span>
+                </td>
+                <td>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-warning" role="progressbar" 
+                             style="width: ${keyword.percentage}%" 
+                             aria-valuenow="${keyword.percentage}" 
+                             aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayFrequentQuestions(questions) {
+        const tbody = document.getElementById('frequentQuestionsTableBody');
+        tbody.innerHTML = '';
+        
+        if (questions.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        لا توجد أسئلة متكررة بعد.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        questions.forEach((question, index) => {
+            const row = document.createElement('tr');
+            const lastAsked = new Date(question.last_asked).toLocaleDateString('ar-EG');
+            
+            row.innerHTML = `
+                <td>
+                    <div style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">
+                        <span class="badge bg-danger">${index + 1}</span>
+                        ${question.question}
+                    </div>
+                </td>
+                <td>
+                    <span class="badge bg-primary fs-6">${question.frequency}</span>
+                </td>
+                <td>
+                    <span class="badge bg-success">${question.percentage}%</span>
+                </td>
+                <td>
+                    <span class="badge bg-secondary">${question.category}</span>
+                </td>
+                <td>
+                    <small class="text-muted">${lastAsked}</small>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function displayUsersActivity(users) {
+        const tbody = document.getElementById('usersActivityTableBody');
+        tbody.innerHTML = '';
+        
+        if (users.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="text-center text-muted py-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        لا يوجد نشاط مستخدمين مسجل بعد.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        users.forEach((user, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>
+                    <span class="badge bg-info">${index + 1}</span>
+                    <strong>${user.username}</strong>
+                </td>
+                <td>${user.count}</td>
+                <td>
+                    <span class="badge bg-success">${user.percentage}%</span>
+                </td>
+                <td>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-success" role="progressbar" 
+                             style="width: ${user.percentage}%" 
+                             aria-valuenow="${user.percentage}" 
+                             aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    let allQuestionsData = []; // Store all questions for filtering
+
+    function displayAllQuestions(questions) {
+        allQuestionsData = questions; // Store for filtering
+        const tbody = document.getElementById('allQuestionsTableBody');
+        tbody.innerHTML = '';
+        
+        if (questions.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="text-center text-muted py-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        لا توجد أسئلة مسجلة بعد. ابدأ بطرح أسئلة في الشات لرؤيتها هنا.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        questions.forEach((question, index) => {
+            const row = document.createElement('tr');
+            const questionDate = new Date(question.timestamp).toLocaleDateString('ar-EG');
+            const questionTime = new Date(question.timestamp).toLocaleTimeString('ar-EG');
+            
+            row.innerHTML = `
+                <td>
+                    <div style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;" 
+                         title="${question.question}">
+                        <span class="badge bg-info">${index + 1}</span>
+                        ${question.question}
+                    </div>
+                </td>
+                <td>
+                    <span class="badge bg-secondary">${question.category}</span>
+                </td>
+                <td>
+                    <small class="text-muted">${question.keywords}</small>
+                </td>
+                <td>
+                    <strong>${question.username}</strong>
+                </td>
+                <td>
+                    <small>${questionDate}<br>${questionTime}</small>
+                </td>
+                <td>
+                    <span class="badge bg-primary">${question.response_length} حرف</span>
+                </td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function filterQuestions() {
+        const searchTerm = document.getElementById('questionSearch').value.toLowerCase();
+        const filteredQuestions = allQuestionsData.filter(question => 
+            question.question.toLowerCase().includes(searchTerm) ||
+            question.category.toLowerCase().includes(searchTerm) ||
+            question.username.toLowerCase().includes(searchTerm) ||
+            question.keywords.toLowerCase().includes(searchTerm)
+        );
+        displayAllQuestions(filteredQuestions);
+    }
+
+    // Check admin access
+    document.addEventListener('DOMContentLoaded', function() {
+        const role = localStorage.getItem('user_role');
+        if (role !== 'admin') {
+            alert('غير مصرح لك بالوصول لهذه الصفحة');
+            window.location.href = '/login';
+        }
+    });
+</script>
+{% endblock %}

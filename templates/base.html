@@ -1,0 +1,1161 @@
+<!--
+  جامعة باديا - نظام الدردشة الذكي
+  تم تطويره بواسطة: عبدالخالق محمد
+  حقوق النشر © 2024 - جميع الحقوق محفوظة
+
+  هذا الكود ملك حصري لجامعة باديا ويحظر نسخه أو توزيعه بدون إذن كتابي مسبق
+-->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}جامعة باديا - شات بوت{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #e6f0ff;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            color: #2c3e50;
+        }
+        
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.8" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: 1440px 100px;
+            animation: wave 15s linear infinite;
+        }
+        
+        .wave1 {
+            animation: wave1 25s linear infinite;
+            z-index: 1000;
+            opacity: 0.8;
+            animation-delay: 0s;
+            bottom: 0;
+        }
+        
+        .wave2 {
+            animation: wave2 20s linear infinite;
+            z-index: 999;
+            opacity: 0.7;
+            animation-delay: -5s;
+            bottom: 10px;
+        }
+        
+        .wave3 {
+            animation: wave3 30s linear infinite;
+            z-index: 998;
+            opacity: 0.3;
+            animation-delay: -2s;
+            bottom: 15px;
+        }
+        
+        @keyframes wave1 {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1440px; }
+        }
+        
+        @keyframes wave2 {
+            0% { background-position-x: 0; }
+            100% { background-position-x: -1440px; }
+        }
+        
+        @keyframes wave3 {
+            0% { background-position-x: 1440px; }
+            100% { background-position-x: 0; }
+        }
+        
+        /* Logo positioning - consolidated styles */
+        
+        .book-shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .book-shape:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+            font-size: 3rem;
+        }
+        
+        .book-shape:nth-child(2) {
+            top: 20%;
+            right: 10%;
+            animation-delay: 1s;
+            font-size: 2.5rem;
+        }
+        
+        .book-shape:nth-child(3) {
+            top: 60%;
+            left: 5%;
+            animation-delay: 2s;
+            font-size: 4rem;
+        }
+        
+        .book-shape:nth-child(4) {
+            bottom: 20%;
+            right: 15%;
+            animation-delay: 3s;
+            font-size: 3.5rem;
+        }
+        
+        .book-shape:nth-child(5) {
+            top: 40%;
+            left: 50%;
+            animation-delay: 4s;
+            font-size: 2rem;
+        }
+        
+        .book-shape:nth-child(6) {
+            bottom: 40%;
+            left: 20%;
+            animation-delay: 5s;
+            font-size: 2.8rem;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        /* تحسين الكروت */
+        .card {
+            background: rgba(255, 253, 240, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            color: #e0e0e0;
+        }
+        
+        .card-header {
+            background: rgba(60, 60, 60, 0.8);
+            border-bottom: 1px solid #444;
+            border-radius: 15px 15px 0 0 !important;
+            color: #ffffff;
+        }
+        
+        /* شعار الجامعة */
+        .university-logo {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            background: rgba(45, 45, 45, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 10px 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid #444;
+        }
+        
+        .university-logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            object-fit: cover;
+        }
+        
+        .logo-text h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #7f9cf5;
+        }
+        
+        .logo-text p {
+            margin: 0;
+            font-size: 12px;
+            color: #aaa;
+        }
+        
+        /* زر تغيير اللغة */
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(45, 45, 45, 0.9);
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 25px;
+            padding: 8px 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .language-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* تحسين الأزرار */
+        .btn {
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* تحسين النافبار */
+        .navbar {
+            background: rgba(107, 140, 66, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .chat-box {
+            background: #2d2d2d;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: #f5f5f0;
+            background: #f5f5f0;
+        }
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        .user-message {
+            background: #1e40af;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+        .bot-message {
+            background: white;
+            border: 1px solid #dee2e6;
+            margin-right: auto;
+        }
+        .chat-input {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #dee2e6;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+            border: none;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .logout-btn {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border: none;
+        }
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #ee5a24 0%, #ff6b6b 100%);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- شعار الجامعة -->
+    {% if not request.path.startswith('/admin') %}
+    <div class="university-logo">
+        <img src="{{ url_for('static', filename='badya-logo.png') }}" alt="شعار جامعة باديا">
+    </div>
+    {% endif %}
+    
+    <!-- خلفية متحركة مع أمواج -->
+    <div class="animated-bg">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
+    
+    
+    <!-- زر تغيير اللغة -->
+    <button class="language-toggle" onclick="toggleLanguage()">
+        <i class="fas fa-globe me-2"></i>
+        <span id="langText">EN</span>
+    </button>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: {% if request.path.startswith('/admin') %}#1e40af{% else %}#1e40af{% endif %} !important;">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                {% if request.path.startswith('/admin') %}
+                <img src="{{ url_for('static', filename='badya-logo.png') }}" alt="شعار جامعة باديا" style="height: 40px; margin-left: 10px;">
+                {% else %}
+                <i class="fas fa-graduation-cap me-2"></i>
+                {% endif %}
+                جامعة باديا - الشات بوت
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">
+                    مرحباً، <span id="student-name">{{ session.get('student_name', 'المستخدم') }}</span>
+                </span>
+                <button class="btn btn-dark logout-btn btn-sm" id="logoutBtn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1" id="logoutIcon"></i>
+                    <span id="logoutText">تسجيل الخروج</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        
+    {% block content %}{% endblock %}
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global variables
+        let token = localStorage.getItem('access_token');
+        function getToken() { return localStorage.getItem('access_token'); }
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'access_token') {
+                token = e.newValue;
+            }
+        });
+        
+        // Enhanced logout function with visual feedback
+        async function logout() {
+            console.log('[INFO] Logout initiated');
+            
+            // Update button to show loading state
+            const logoutBtn = document.getElementById('logoutBtn');
+            const logoutIcon = document.getElementById('logoutIcon');
+            const logoutText = document.getElementById('logoutText');
+            
+            if (logoutBtn) {
+                logoutBtn.disabled = true;
+                logoutBtn.classList.add('opacity-75');
+            }
+            if (logoutIcon) {
+                logoutIcon.className = 'fas fa-spinner fa-spin me-1';
+            }
+            if (logoutText) {
+                logoutText.textContent = 'جاري تسجيل الخروج...';
+            }
+            
+            // Clear local storage immediately to prevent UI issues
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('student_name');
+            localStorage.removeItem('language');
+            
+            try {
+                // Try to notify server about logout (optional)
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log('[INFO] Server logout response:', response.status);
+                
+            } catch (error) {
+                console.log('[INFO] Server logout failed, but continuing with client logout:', error);
+            }
+            
+            // Small delay to show the loading state
+            setTimeout(() => {
+                console.log('[INFO] Redirecting to login page');
+                window.location.href = '/login';
+            }, 500);
+        }
+        
+        // Check if user is authenticated
+        function checkAuth() {
+            const publicPages = ['/login', '/signup', '/'];
+            const currentPath = window.location.pathname;
+            const authToken = getToken();
+            
+            if (!authToken && !publicPages.includes(currentPath)) {
+                window.location.href = '/login';
+                return false;
+            } else if (authToken && (currentPath === '/login' || currentPath === '/signup')) {
+                window.location.href = '/chat';
+                return false;
+            }
+            return true;
+        }
+
+        // API call helper
+        async function apiCall(url, options = {}) {
+            const authToken = getToken();
+            const defaultOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(authToken ? { 'Authorization': `Bearer ${authToken}` } : {})
+                }
+            };
+            
+            const finalOptions = {
+                ...defaultOptions,
+                ...options,
+                headers: {
+                    ...defaultOptions.headers,
+                    ...options.headers
+                }
+            };
+
+            try {
+                const response = await fetch(url, finalOptions);
+                if (response.status === 401) {
+                    logout();
+                    return null;
+                }
+                return response;
+            } catch (error) {
+                console.error('API call failed:', error);
+                return null;
+            }
+        }
+
+        // Update student name from localStorage and initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize student name display
+            const studentName = localStorage.getItem('student_name');
+            const studentNameElement = document.getElementById('student-name');
+            if (studentName && studentNameElement) {
+                studentNameElement.textContent = studentName;
+            }
+            
+            // Check authentication
+            checkAuth();
+            
+            // Initialize language
+            const savedLang = localStorage.getItem('language') || 'ar';
+            if (savedLang === 'en') {
+                // Small delay to ensure DOM is fully loaded
+                setTimeout(() => toggleLanguage(), 100);
+            }
+            
+            // Add error handling for missing logo
+            const logo = document.querySelector('.university-logo img');
+            if (logo) {
+                logo.onerror = function() {
+                    this.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iIzFhNGJiZSIgZD0iTTEyIDJDNi40NyAyIDIgNi41IDIgMTJzNC40NyAxMCAxMCAxMHMxMC00LjUgMTAtMTBTMTcuNTMgMiAxMiAyem0wIDE4Yy00LjQxIDAtOC0zLjU5LTgtOHMzLjU5LTggOC04czggMy41OSA4IDhzLTMuNTkgOC04IDh6Ii8+PC9zdmc+';
+                    this.alt = 'Badya University Logo';
+                };
+            }
+        });
+        
+        // تغيير اللغة
+        function toggleLanguage() {
+            const html = document.documentElement;
+            const langText = document.getElementById('langText');
+            const currentLang = html.getAttribute('lang');
+            const newLang = currentLang === 'ar' ? 'en' : 'ar';
+            
+            // Update HTML attributes
+            html.setAttribute('lang', newLang);
+            html.setAttribute('dir', newLang === 'ar' ? 'rtl' : 'ltr');
+            
+            // Update button text
+            langText.textContent = newLang === 'ar' ? 'EN' : 'عربي';
+            
+            // Save preference
+            localStorage.setItem('language', newLang);
+            
+            // Apply translations
+            if (newLang === 'en') {
+                translateToEnglish();
+            } else {
+                translateToArabic();
+            }
+            
+            // Update chat messages if in chat interface
+            if (typeof translateChatMessages === 'function') {
+                translateChatMessages(newLang);
+            }
+            
+            // Update RTL/LTR specific styles
+            document.body.classList.toggle('rtl', newLang === 'ar');
+            document.body.classList.toggle('ltr', newLang !== 'ar');
+        }
+        
+        // Chat message translations with more comprehensive dictionary
+        const messageTranslations = {
+            'ar': {
+                // Common UI
+                'Welcome to Badya University! How can I help you today?': 'مرحباً بك في جامعة باديا! كيف يمكنني مساعدتك اليوم؟',
+                'Type your message here...': 'اكتب رسالتك هنا...',
+                'Send': 'إرسال',
+                'Upload File': 'رفع ملف',
+                'Voice Recording': 'تسجيل صوتي',
+                'Start Recording': 'بدء التسجيل',
+                'Stop Recording': 'إيقاف التسجيل',
+                'Recording...': 'جاري التسجيل...',
+                'Chat': 'المحادثة',
+                'Ask any question about Badya University': 'اسأل أي سؤال عن جامعة باديا',
+                'Smart Chatbot': 'الشات بوت الذكي',
+                'Logout': 'تسجيل الخروج',
+                'Login': 'تسجيل الدخول',
+                'Sign Up': 'إنشاء حساب',
+                'Username': 'اسم المستخدم',
+                'Password': 'كلمة المرور',
+                'Email': 'البريد الإلكتروني',
+                'Name': 'الاسم',
+                'Submit': 'إرسال',
+                'Cancel': 'إلغاء',
+                'Error': 'خطأ',
+                'Success': 'نجاح',
+                'Loading...': 'جاري التحميل...',
+                'Please wait...': 'يرجى الانتظار...',
+                'An error occurred': 'حدث خطأ ما',
+                'Try again': 'حاول مرة أخرى',
+                'Settings': 'الإعدادات',
+                'Profile': 'الملف الشخصي',
+                'Notifications': 'الإشعارات',
+                'Help': 'مساعدة',
+                'About': 'حول',
+                'Contact Us': 'اتصل بنا',
+                'Terms of Service': 'شروط الخدمة',
+                'Privacy Policy': 'سياسة الخصوصية',
+                'FAQ': 'الأسئلة الشائعة',
+                'Search': 'بحث',
+                'Menu': 'القائمة',
+                'Close': 'إغلاق',
+                'Save': 'حفظ',
+                'Edit': 'تعديل',
+                'Delete': 'حذف',
+                'Confirm': 'تأكيد',
+                'Are you sure?': 'هل أنت متأكد؟',
+                'Yes': 'نعم',
+                'No': 'لا',
+                'Back': 'رجوع',
+                'Next': 'التالي',
+                'Previous': 'السابق',
+                'First': 'الأول',
+                'Last': 'الأخير',
+                'Page': 'صفحة',
+                'of': 'من',
+                'items': 'عنصر',
+                'No items found': 'لا توجد عناصر',
+                'Showing': 'عرض',
+                'to': 'إلى',
+                'results': 'نتيجة',
+                'Filter': 'تصفية',
+                'Sort by': 'ترتيب حسب',
+                'Newest': 'الأحدث',
+                'Oldest': 'الأقدم',
+                'Name (A-Z)': 'الاسم (أ-ي)',
+                'Name (Z-A)': 'الاسم (ي-أ)',
+                'Date': 'التاريخ',
+                'Status': 'الحالة',
+                'Type': 'النوع',
+                'Category': 'الفئة',
+                'All': 'الكل',
+                'Active': 'نشط',
+                'Inactive': 'غير نشط',
+                'Pending': 'قيد الانتظار',
+                'Completed': 'مكتمل',
+                'Failed': 'فشل',
+                'Download': 'تحميل',
+                'Upload': 'رفع',
+                'Preview': 'معاينة',
+                'Print': 'طباعة',
+                'Share': 'مشاركة',
+                'View': 'عرض',
+                'Details': 'التفاصيل',
+                'Actions': 'الإجراءات',
+                'Created at': 'تم الإنشاء في',
+                'Updated at': 'تم التحديث في',
+                'Created by': 'تم الإنشاء بواسطة',
+                'Updated by': 'تم التحديث بواسطة',
+                'Description': 'الوصف',
+                'Title': 'العنوان',
+                'Content': 'المحتوى',
+                'Image': 'صورة',
+                'File': 'ملف',
+                'Link': 'رابط',
+                'URL': 'رابط',
+                'Phone': 'هاتف',
+                'Address': 'عنوان',
+                'City': 'مدينة',
+                'Country': 'دولة',
+                'Postal Code': 'الرمز البريدي',
+                'State/Province': 'الولاية/المحافظة',
+                'Select...': 'اختر...',
+                'Select All': 'تحديد الكل',
+                'Deselect All': 'إلغاء تحديد الكل',
+                'No options': 'لا توجد خيارات',
+                'No results found': 'لم يتم العثور على نتائج',
+                'Please select...': 'الرجاء الاختيار...',
+                'Select an option': 'اختر خيارًا',
+                'Select multiple options': 'اختر خيارات متعددة',
+                'Clear': 'مسح',
+                'Apply': 'تطبيق',
+                'Today': 'اليوم',
+                'Yesterday': 'أمس',
+                'This Week': 'هذا الأسبوع',
+                'Last Week': 'الأسبوع الماضي',
+                'This Month': 'هذا الشهر',
+                'Last Month': 'الشهر الماضي',
+                'Custom Range': 'نطاق مخصص',
+                'From': 'من',
+                'To': 'إلى',
+                'January': 'يناير',
+                'February': 'فبراير',
+                'March': 'مارس',
+                'April': 'أبريل',
+                'May': 'مايو',
+                'June': 'يونيو',
+                'July': 'يوليو',
+                'August': 'أغسطس',
+                'September': 'سبتمبر',
+                'October': 'أكتوبر',
+                'November': 'نوفمبر',
+                'December': 'ديسمبر',
+                'Jan': 'يناير',
+                'Feb': 'فبراير',
+                'Mar': 'مارس',
+                'Apr': 'أبريل',
+                'Jun': 'يونيو',
+                'Jul': 'يوليو',
+                'Aug': 'أغسطس',
+                'Sep': 'سبتمبر',
+                'Oct': 'أكتوبر',
+                'Nov': 'نوفمبر',
+                'Dec': 'ديسمبر',
+                'Sunday': 'الأحد',
+                'Monday': 'الاثنين',
+                'Tuesday': 'الثلاثاء',
+                'Wednesday': 'الأربعاء',
+                'Thursday': 'الخميس',
+                'Friday': 'الجمعة',
+                'Saturday': 'السبت',
+                'Sun': 'أحد',
+                'Mon': 'إثنين',
+                'Tue': 'ثلاثاء',
+                'Wed': 'أربعاء',
+                'Thu': 'خميس',
+                'Fri': 'جمعة',
+                'Sat': 'سبت',
+                'Su': 'ح',
+                'Mo': 'ن',
+                'Tu': 'ث',
+                'We': 'ر',
+                'Th': 'خ',
+                'Fr': 'ج',
+                'Sa': 'س',
+                'Week': 'أسبوع',
+                'Weeks': 'أسابيع',
+                'Day': 'يوم',
+                'Days': 'أيام',
+                'Hour': 'ساعة',
+                'Hours': 'ساعات',
+                'Minute': 'دقيقة',
+                'Minutes': 'دقائق',
+                'Second': 'ثانية',
+                'Seconds': 'ثوان',
+                'ago': 'منذ',
+                'just now': 'الآن',
+                'a minute ago': 'منذ دقيقة',
+                'minutes ago': 'دقائق مضت',
+                'an hour ago': 'منذ ساعة',
+                'hours ago': 'ساعات مضت',
+                'a day ago': 'منذ يوم',
+                'days ago': 'أيام مضت',
+                'a week ago': 'منذ أسبوع',
+                'weeks ago': 'أسابيع مضت',
+                'a month ago': 'منذ شهر',
+                'months ago': 'شهور مضت',
+                'a year ago': 'منذ عام',
+                'years ago': 'أعوام مضت',
+                'Last 7 Days': 'آخر 7 أيام',
+                'Last 30 Days': 'آخر 30 يومًا',
+                'This Year': 'هذا العام',
+                'Last Year': 'العام الماضي',
+                'Custom': 'مخصص',
+                'OK': 'موافق',
+                'Cancel': 'إلغاء',
+                'Apply': 'تطبيق',
+                'Clear': 'مسح',
+                'Today': 'اليوم',
+                'Now': 'الآن',
+                'Done': 'تم',
+                'Select All': 'تحديد الكل',
+                'Deselect All': 'إلغاء تحديد الكل',
+                'No matches found': 'لم يتم العثور على تطابقات',
+                'Search...': 'بحث...',
+                'Please enter at least {0} characters': 'الرجاء إدخال {0} أحرف على الأقل',
+                'Loading...': 'جاري التحميل...',
+                'No data available': 'لا توجد بيانات متاحة',
+                'No results found': 'لم يتم العثور على نتائج',
+                'Please select an option': 'الرجاء اختيار خيار',
+                'Please select {0} options': 'الرجاء اختيار {0} خيارات',
+                'You can only select {0} options': 'يمكنك اختيار {0} خيارات فقط',
+                'Select all {0}': 'تحديد كل {0}',
+                'Deselect all {0}': 'إلغاء تحديد كل {0}',
+                'Add new item': 'إضافة عنصر جديد',
+                'Add {0}': 'إضافة {0}',
+                'Edit {0}': 'تعديل {0}',
+                'Delete {0}': 'حذف {0}',
+                'View {0}': 'عرض {0}',
+                'Are you sure you want to delete this item?': 'هل أنت متأكد من رغبتك في حذف هذا العنصر؟',
+                'This action cannot be undone.': 'لا يمكن التراجع عن هذا الإجراء.',
+                'Confirm Delete': 'تأكيد الحذف',
+                'Confirm Action': 'تأكيد الإجراء',
+                'Success!': 'نجاح!',
+                'Error!': 'خطأ!',
+                'Warning!': 'تحذير!',
+                'Info': 'معلومات',
+                'The operation was completed successfully.': 'تمت العملية بنجاح.',
+                'An error occurred while processing your request.': 'حدث خطأ أثناء معالجة طلبك.',
+                'Please check your internet connection and try again.': 'الرجاء التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.',
+                'Session expired. Please log in again.': 'انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.',
+                'You do not have permission to perform this action.': 'ليس لديك صلاحية لتنفيذ هذا الإجراء.',
+                'The requested page was not found.': 'الصفحة المطلوبة غير موجودة.',
+                'The server encountered an error.': 'واجه الخادم خطأً.',
+                'Service Unavailable': 'الخدمة غير متوفرة',
+                'Bad Request': 'طلب غير صالح',
+                'Unauthorized': 'غير مصرح',
+                'Forbidden': 'ممنوع',
+                'Not Found': 'غير موجود',
+                'Method Not Allowed': 'طريقة غير مسموح بها',
+                'Not Acceptable': 'غير مقبول',
+                'Request Timeout': 'انتهت مهلة الطلب',
+                'Conflict': 'تعارض',
+                'Gone': 'انتهى',
+                'Length Required': 'الطول مطلوب',
+                'Precondition Failed': 'فشل الشرط المسبق',
+                'Payload Too Large': 'الحمولة كبيرة جدًا',
+                'URI Too Long': 'الرابط طويل جدًا',
+                'Unsupported Media Type': 'نوع الوسائط غير مدعوم',
+                'Range Not Satisfiable': 'النطاق غير مرضٍ',
+                'Expectation Failed': 'فشل التوقع',
+                'I\'m a teapot': 'أنا إبريق شاي',
+                'Misdirected Request': 'طلب توجيه خاطئ',
+                'Unprocessable Entity': 'كيان غير قابل للمعالجة',
+                'Locked': 'مقفل',
+                'Failed Dependency': 'فشل التبعية',
+                'Too Early': 'مبكر جدًا',
+                'Upgrade Required': 'مطلوب تحديث',
+                'Precondition Required': 'الشرط المسبق مطلوب',
+                'Too Many Requests': 'طلبات كثيرة جدًا',
+                'Request Header Fields Too Large': 'حقول رأس الطلب كبيرة جدًا',
+                'Unavailable For Legal Reasons': 'غير متاح لأسباب قانونية',
+                'Internal Server Error': 'خطأ داخلي في الخادم',
+                'Not Implemented': 'غير منفذ',
+                'Bad Gateway': 'بوابة خاطئة',
+                'Service Unavailable': 'الخدمة غير متوفرة',
+                'Gateway Timeout': 'انتهت مهلة البوابة',
+                'HTTP Version Not Supported': 'إصدار HTTP غير مدعوم',
+                'Variant Also Negotiates': 'المتغير يتفاوض أيضًا',
+                'Insufficient Storage': 'تخزين غير كافٍ',
+                'Loop Detected': 'تم اكتشاف حلقة',
+                'Not Extended': 'غير ممتد',
+                'Network Authentication Required': 'مطلوب مصادقة الشبكة'
+            },
+            'en': {
+                // Reverse of all the above translations
+                'مرحباً بك في جامعة باديا! كيف يمكنني مساعدتك اليوم؟': 'Welcome to Badya University! How can I help you today?',
+                'اكتب رسالتك هنا...': 'Type your message here...',
+                'إرسال': 'Send',
+                'رفع ملف': 'Upload File',
+                'تسجيل صوتي': 'Voice Recording',
+                'بدء التسجيل': 'Start Recording',
+                'إيقاف التسجيل': 'Stop Recording',
+                'جاري التسجيل...': 'Recording...',
+                'المحادثة': 'Chat',
+                'اسأل أي سؤال عن جامعة باديا': 'Ask any question about Badya University',
+                'الشات بوت الذكي': 'Smart Chatbot',
+                'تسجيل الخروج': 'Logout',
+                'تسجيل الدخول': 'Login',
+                'إنشاء حساب': 'Sign Up',
+                'اسم المستخدم': 'Username',
+                'كلمة المرور': 'Password',
+                'البريد الإلكتروني': 'Email',
+                'الاسم': 'Name',
+                'إرسال': 'Submit',
+                'إلغاء': 'Cancel',
+                'خطأ': 'Error',
+                'نجاح': 'Success',
+                'جاري التحميل...': 'Loading...',
+                'يرجى الانتظار...': 'Please wait...',
+                'حدث خطأ ما': 'An error occurred',
+                'حاول مرة أخرى': 'Try again',
+                'الإعدادات': 'Settings',
+                'الملف الشخصي': 'Profile',
+                'الإشعارات': 'Notifications',
+                'مساعدة': 'Help',
+                'حول': 'About',
+                'اتصل بنا': 'Contact Us',
+                'شروط الخدمة': 'Terms of Service',
+                'سياسة الخصوصية': 'Privacy Policy',
+                'الأسئلة الشائعة': 'FAQ',
+                'بحث': 'Search',
+                'القائمة': 'Menu',
+                'إغلاق': 'Close',
+                'حفظ': 'Save',
+                'تعديل': 'Edit',
+                'حذف': 'Delete',
+                'تأكيد': 'Confirm',
+                'هل أنت متأكد؟': 'Are you sure?',
+                'نعم': 'Yes',
+                'لا': 'No',
+                'رجوع': 'Back',
+                'التالي': 'Next',
+                'السابق': 'Previous',
+                'الأول': 'First',
+                'الأخير': 'Last',
+                'صفحة': 'Page',
+                'من': 'of',
+                'عنصر': 'items',
+                'لا توجد عناصر': 'No items found',
+                'عرض': 'Showing',
+                'إلى': 'to',
+                'نتيجة': 'results',
+                'تصفية': 'Filter',
+                'ترتيب حسب': 'Sort by',
+                'الأحدث': 'Newest',
+                'الأقدم': 'Oldest',
+                'الاسم (أ-ي)': 'Name (A-Z)',
+                'الاسم (ي-أ)': 'Name (Z-A)',
+                'التاريخ': 'Date',
+                'الحالة': 'Status',
+                'النوع': 'Type',
+                'الفئة': 'Category',
+                'الكل': 'All',
+                'نشط': 'Active',
+                'غير نشط': 'Inactive',
+                'قيد الانتظار': 'Pending',
+                'مكتمل': 'Completed',
+                'فشل': 'Failed',
+                'تحميل': 'Download',
+                'رفع': 'Upload',
+                'معاينة': 'Preview',
+                'طباعة': 'Print',
+                'مشاركة': 'Share',
+                'عرض': 'View',
+                'التفاصيل': 'Details',
+                'الإجراءات': 'Actions',
+                'تم الإنشاء في': 'Created at',
+                'تم التحديث في': 'Updated at',
+                'تم الإنشاء بواسطة': 'Created by',
+                'تم التحديث بواسطة': 'Updated by',
+                'الوصف': 'Description',
+                'العنوان': 'Title',
+                'المحتوى': 'Content',
+                'صورة': 'Image',
+                'ملف': 'File',
+                'رابط': 'Link',
+                'هاتف': 'Phone',
+                'عنوان': 'Address',
+                'مدينة': 'City',
+                'دولة': 'Country',
+                'الرمز البريدي': 'Postal Code',
+                'الولاية/المحافظة': 'State/Province',
+                'اختر...': 'Select...',
+                'إلغاء تحديد الكل': 'Deselect All',
+                'لا توجد خيارات': 'No options',
+                'الرجاء الاختيار...': 'Please select...',
+                'اختر خيارًا': 'Select an option',
+                'اختر خيارات متعددة': 'Select multiple options',
+                'مسح': 'Clear',
+                'تطبيق': 'Apply',
+                'اليوم': 'Today',
+                'أمس': 'Yesterday',
+                'هذا الأسبوع': 'This Week',
+                'الأسبوع الماضي': 'Last Week',
+                'هذا الشهر': 'This Month',
+                'الشهر الماضي': 'Last Month',
+                'نطاق مخصص': 'Custom Range',
+                'من': 'From',
+                'إلى': 'To',
+                'يناير': 'January',
+                'فبراير': 'February',
+                'مارس': 'March',
+                'أبريل': 'April',
+                'مايو': 'May',
+                'يونيو': 'June',
+                'يوليو': 'July',
+                'أغسطس': 'August',
+                'سبتمبر': 'September',
+                'أكتوبر': 'October',
+                'نوفمبر': 'November',
+                'ديسمبر': 'December',
+                'أحد': 'Sun',
+                'إثنين': 'Mon',
+                'ثلاثاء': 'Tue',
+                'أربعاء': 'Wed',
+                'خميس': 'Thu',
+                'جمعة': 'Fri',
+                'سبت': 'Sat',
+                'ح': 'Su',
+                'ن': 'Mo',
+                'ث': 'Tu',
+                'ر': 'We',
+                'خ': 'Th',
+                'ج': 'Fr',
+                'س': 'Sa',
+                'أسبوع': 'Week',
+                'أسابيع': 'Weeks',
+                'يوم': 'Day',
+                'أيام': 'Days',
+                'ساعة': 'Hour',
+                'ساعات': 'Hours',
+                'دقيقة': 'Minute',
+                'دقائق': 'Minutes',
+                'ثانية': 'Second',
+                'ثوان': 'Seconds',
+                'منذ': 'ago',
+                'الآن': 'just now',
+                'منذ دقيقة': 'a minute ago',
+                'دقائق مضت': 'minutes ago',
+                'منذ ساعة': 'an hour ago',
+                'ساعات مضت': 'hours ago',
+                'منذ يوم': 'a day ago',
+                'أيام مضت': 'days ago',
+                'منذ أسبوع': 'a week ago',
+                'أسابيع مضت': 'weeks ago',
+                'منذ شهر': 'a month ago',
+                'شهور مضت': 'months ago',
+                'منذ عام': 'a year ago',
+                'أعوام مضت': 'years ago',
+                'آخر 7 أيام': 'Last 7 Days',
+                'آخر 30 يومًا': 'Last 30 Days',
+                'هذا العام': 'This Year',
+                'العام الماضي': 'Last Year',
+                'مخصص': 'Custom',
+                'موافق': 'OK',
+                'تم': 'Done',
+                'بحث...': 'Search...',
+                'الرجاء إدخال {0} أحرف على الأقل': 'Please enter at least {0} characters',
+                'لا توجد بيانات متاحة': 'No data available',
+                'لم يتم العثور على نتائج': 'No results found',
+                'الرجاء اختيار خيار': 'Please select an option',
+                'الرجاء اختيار {0} خيارات': 'Please select {0} options',
+                'يمكنك اختيار {0} خيارات فقط': 'You can only select {0} options',
+                'تحديد كل {0}': 'Select all {0}',
+                'إلغاء تحديد كل {0}': 'Deselect all {0}',
+                'إضافة عنصر جديد': 'Add new item',
+                'إضافة {0}': 'Add {0}',
+                'تعديل {0}': 'Edit {0}',
+                'حذف {0}': 'Delete {0}',
+                'عرض {0}': 'View {0}',
+                'هل أنت متأكد من رغبتك في حذف هذا العنصر؟': 'Are you sure you want to delete this item?',
+                'لا يمكن التراجع عن هذا الإجراء.': 'This action cannot be undone.',
+                'تأكيد الحذف': 'Confirm Delete',
+                'تأكيد الإجراء': 'Confirm Action',
+                'نجاح!': 'Success!',
+                'خطأ!': 'Error!',
+                'تحذير!': 'Warning!',
+                'معلومات': 'Info',
+                'تمت العملية بنجاح.': 'The operation was completed successfully.',
+                'حدث خطأ أثناء معالجة طلبك.': 'An error occurred while processing your request.',
+                'الرجاء التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.': 'Please check your internet connection and try again.',
+                'انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.': 'Session expired. Please log in again.',
+                'ليس لديك صلاحية لتنفيذ هذا الإجراء.': 'You do not have permission to perform this action.',
+                'الصفحة المطلوبة غير موجودة.': 'The requested page was not found.',
+                'واجه الخادم خطأً.': 'The server encountered an error.',
+                'الخدمة غير متوفرة': 'Service Unavailable',
+                'طلب غير صالح': 'Bad Request',
+                'غير مصرح': 'Unauthorized',
+                'ممنوع': 'Forbidden',
+                'غير موجود': 'Not Found',
+                'طريقة غير مسموح بها': 'Method Not Allowed',
+                'غير مقبول': 'Not Acceptable',
+                'انتهت مهلة الطلب': 'Request Timeout',
+                'تعارض': 'Conflict',
+                'انتهى': 'Gone',
+                'الطول مطلوب': 'Length Required',
+                'فشل الشرط المسبق': 'Precondition Failed',
+                'الحمولة كبيرة جدًا': 'Payload Too Large',
+                'الرابط طويل جدًا': 'URI Too Long',
+                'نوع الوسائط غير مدعوم': 'Unsupported Media Type',
+                'النطاق غير مرضٍ': 'Range Not Satisfiable',
+                'فشل التوقع': 'Expectation Failed',
+                'أنا إبريق شاي': 'I\'m a teapot',
+                'طلب توجيه خاطئ': 'Misdirected Request',
+                'كيان غير قابل للمعالجة': 'Unprocessable Entity',
+                'مقفل': 'Locked',
+                'فشل التبعية': 'Failed Dependency',
+                'مبكر جدًا': 'Too Early',
+                'مطلوب تحديث': 'Upgrade Required',
+                'الشرط المسبق مطلوب': 'Precondition Required',
+                'طلبات كثيرة جدًا': 'Too Many Requests',
+                'حقول رأس الطلب كبيرة جدًا': 'Request Header Fields Too Large',
+                'غير متاح لأسباب قانونية': 'Unavailable For Legal Reasons',
+                'خطأ داخلي في الخادم': 'Internal Server Error',
+                'غير منفذ': 'Not Implemented',
+                'بوابة خاطئة': 'Bad Gateway',
+                'انتهت مهلة البوابة': 'Gateway Timeout',
+                'إصدار HTTP غير مدعوم': 'HTTP Version Not Supported',
+                'المتغير يتفاوض أيضًا': 'Variant Also Negotiates',
+                'تخزين غير كافٍ': 'Insufficient Storage',
+                'تم اكتشاف حلقة': 'Loop Detected',
+                'غير ممتد': 'Not Extended',
+                'مطلوب مصادقة الشبكة': 'Network Authentication Required'
+            }
+        };
+
+        // Translate all messages in the chat and UI elements
+        function translateChatMessages(targetLang) {
+            try {
+                // Update RTL/LTR direction
+                document.documentElement.setAttribute('dir', targetLang === 'ar' ? 'rtl' : 'ltr');
+                document.body.classList.toggle('rtl', targetLang === 'ar');
+                document.body.classList.toggle('ltr', targetLang !== 'ar');
+                
+                // Get all elements that might contain translatable text
+                const elements = document.querySelectorAll('*:not(script):not(style):not(meta):not(link):not(iframe):not(canvas):not(svg):not(path):not(rect):not(circle):not(ellipse):not(line):not(polyline):not(polygon):not(text):not(use):not(g):not(defs):not(symbol)');
+                
+                elements.forEach(element => {
+                    try {
+                        // Skip elements that don't need translation
+                        if (!element.textContent || 
+                            element.tagName === 'INPUT' || 
+                            element.tagName === 'TEXTAREA' ||
+                            element.tagName === 'SELECT' ||
+                            element.tagName === 'BUTTON' ||
+                            element.querySelector('input, textarea, select, button, a[href]')) {
+                            return;
+                        }
+                        
+                        // Get all text nodes in the element
+                        const textNodes = [];
+                        const walker = document.createTreeWalker(
+                            element, 
+                            NodeFilter.SHOW_TEXT, 
+                            { 
+                                acceptNode: function(node) { 
+                                    return node.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT; 
+                                }
+                            }, 
+                            false
+                        );
+                        
+                        let node;
+                        while (node = walker.nextNode()) {
+                            textNodes.push(node);
+                        }
+                        
+                        // Translate each text node
+                        textNodes.forEach(textNode => {
+                            const text = textNode.textContent.trim();
+                            if (text && messageTranslations[targetLang] && messageTranslations[targetLang][text]) {
+                                textNode.textContent = messageTranslations[targetLang][text];
+                            }
+                        });
+                        
+                        // Handle attributes that might need translation
+                        const attributes = ['placeholder', 'title', 'aria-label', 'alt'];
+                        attributes.forEach(attr => {
+                            if (element.hasAttribute(attr)) {
+                                const value = element.getAttribute(attr);
+                                if (messageTranslations[targetLang] && messageTranslations[targetLang][value]) {
+                                    element.setAttribute(attr, messageTranslations[targetLang][value]);
+                                }
+                            }
+                        });
+                        
+                    } catch (e) {
+                        console.error('Error translating element:', e);
+                    }
+                });
+                
+                // Handle iframes
+                document.querySelectorAll('iframe').forEach(iframe => {
+                    try {
+                        if (iframe.contentDocument) {
+                            if (targetLang === 'ar') {
+                                iframe.contentDocument.documentElement.setAttribute('dir', 'rtl');
+                            } else {
+                                iframe.contentDocument.documentElement.setAttribute('dir', 'ltr');
+                            }
+                        }
+                    } catch (e) {
+                        // Cross-origin iframe, can't access
+                    }
+                });
+                
+                // Dispatch event for any custom handlers
+                document.dispatchEvent(new CustomEvent('languageChanged', { 
+                    detail: { 
+                        language: targetLang,
+                        direction: targetLang === 'ar' ? 'rtl' : 'ltr'
+                    } 
+                }));
+                
+            } catch (e) {
+                console.error('Error in translateChatMessages:', e);
+            }
+        }
+
+        // Enhanced translation functions using the comprehensive dictionary
+        function translateToEnglish() {
+            // Use the comprehensive translation system
+            translateChatMessages('en');
+            
+            // Update page title
+            document.title = 'Badya University - Chatbot';
+        }
+        
+        function translateToArabic() {
+            // Use the comprehensive translation system
+            translateChatMessages('ar');
+            
+            // Update page title
+            document.title = 'جامعة باديا - شات بوت';
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

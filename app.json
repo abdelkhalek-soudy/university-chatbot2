@@ -1,0 +1,38 @@
+{
+  "name": "Badya University Chatbot",
+  "description": "AI-powered chatbot for Badya University students with voice support and admin dashboard",
+  "repository": "https://github.com/abdelkhalek-soudy/university-chatbot2",
+  "logo": "https://img.shields.io/badge/Badya-University%20Chatbot-blue",
+  "keywords": ["python", "flask", "chatbot", "openai", "gpt-4", "university", "arabic", "voice"],
+  "success_url": "/",
+  "env": {
+    "OPENAI_API_KEY": {
+      "description": "Your OpenAI API key from https://platform.openai.com/api-keys",
+      "required": true
+    },
+    "SECRET_KEY": {
+      "description": "Secret key for Flask sessions (auto-generated)",
+      "generator": "secret"
+    },
+    "FLASK_ENV": {
+      "description": "Flask environment",
+      "value": "production"
+    },
+    "HOST": {
+      "description": "Host address",
+      "value": "0.0.0.0"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
